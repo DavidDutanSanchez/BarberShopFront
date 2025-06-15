@@ -1,6 +1,6 @@
 // src/components/Layout.jsx
-import { useEffect, Suspense, lazy } from "react";
-import { Outlet, useNavigate, NavLink } from "react-router-dom";
+import { useEffect, Suspense } from "react";
+import { Outlet, NavLink } from "react-router-dom";
 import {
   Box,
   Drawer,
@@ -9,12 +9,15 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
+
 } from "@mui/material";
 import Person from "@mui/icons-material/Person"
 import Settings from "@mui/icons-material/Settings"
 import BarChart from "@mui/icons-material/BarChart"
 import Logout from "@mui/icons-material/Logout"
 import ContentCut from "@mui/icons-material/ContentCut"
+import Inventory from "@mui/icons-material/Inventory"
+import Web from "@mui/icons-material/Web";
 
 
 
@@ -28,9 +31,11 @@ export default function Layout() {
   }, []);
 
   const menuItems = [
-    { label: "Registro de Empleados", to: "/Login", icon: <Person /> },
+    { label: "Registro de Empleados", to: "/Empleados", icon: <Person /> },
     { label: "Reportes", to: "/Login", icon: <BarChart /> },
     { label: "Cortes", to: "/Login", icon: <ContentCut /> },
+    { label: "Productos", to: "/Productos", icon: <Inventory /> },
+    { label: "Pagina", to: "/Productos", icon: <Web /> },
     { label: "Configuracion", to: "/Login", icon: <Settings /> },
     { label: "Salir", to: "/Login", icon: <Logout /> },
 
