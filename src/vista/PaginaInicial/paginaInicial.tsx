@@ -50,7 +50,7 @@ const PaginaInicial: React.FC = () => {
       {/* Portada */}
       <section
         className="h-[90vh] bg-cover bg-center flex items-center justify-center relative group transition-all duration-1000 ease-in-out animate-fade-in"
-        style={{ backgroundImage: 'url("/src/Files/Grupal1.jpg")' }}
+        style={{ backgroundImage: 'url("/assets/Grupal1.jpg")' }}
       >
         <div className="absolute bottom-6 left-6 bg-white bg-opacity-90 text-black px-6 py-3 rounded-lg shadow-md text-lg font-semibold tracking-wide animate-slide-up">
           TU ESTILO EN LAS MEJORES MANOS
@@ -82,10 +82,10 @@ const PaginaInicial: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-8">
           <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition flex flex-col items-center">
             <h3 className="text-2xl font-bold text-[#FFD700] mb-4 text-center">Grupo de Barberos Profesionales</h3>
-            <img src="src/Files/Grupal2.jpg" alt="Grupo de barberos" className="w-full h-[450px] object-cover rounded-lg mb-4" />
+            <img src="/assets/Grupal2.jpg" alt="Grupo de barberos" className="w-full h-[450px] object-cover rounded-lg mb-4" />
           </div>
           <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition flex flex-col items-center">
-            <img src="src/Files/Pintado.jpg" alt="CEO Ahitofel Pintado" className="w-full h-[450px] object-contain rounded-lg mb-4" />
+            <img src="/assets/Pintado.jpg" alt="CEO Ahitofel Pintado" className="w-full h-[450px] object-contain rounded-lg mb-4" />
             <h3 className="text-2xl font-bold text-black text-center mb-1">Ahitofel luztein pintado calle</h3>
             <p className="text-gray-600 text-center">CEO & BARBERO PROFESIONAL</p>
           </div>
@@ -106,7 +106,7 @@ const PaginaInicial: React.FC = () => {
         <div className="mb-16">
           <h3 className="text-2xl font-bold text-[#FFD700] mb-4">Fotos</h3>
           <div className="flex overflow-x-auto space-x-6 py-4">
-            {["src/Files/1.jpg", "src/Files/2.jpg"].map((foto, index) => (
+            {["/assets/1.jpg", "/assets/2.jpg"].map((foto, index) => (
               <img
                 key={index}
                 src={foto}
@@ -123,11 +123,11 @@ const PaginaInicial: React.FC = () => {
           <h3 className="text-2xl font-bold text-[#FFD700] mb-4">Videos</h3>
           <div className="flex overflow-x-auto space-x-6 py-4">
             {[
-              "src/Files/1.mp4",
-              "src/Files/2.mp4",
-              "src/Files/3.mp4",
-              "src/Files/4.mp4",
-              "src/Files/5.mp4"
+              "/assets/1.mp4",
+              "/assets/2.mp4",
+              "/assets/3.mp4",
+              "/assets/4.mp4",
+              "/assets/5.mp4"
             ].map((video, index) => (
               <video
                 key={index}
