@@ -1,2 +1,5 @@
-platform:
-  node_version: "20.11.1"
+app_location: "/"
+output_location: "dist"
+
+build_environment_variables:
+  NODE_VERSION: "20.12.2"
