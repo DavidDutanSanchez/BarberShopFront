@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaWhatsapp, FaEnvelope, FaBars } from "react-icons/fa";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import emailjs from '@emailjs/browser';
+
 
 const PaginaInicial: React.FC = () => {
   const seccionMisionVision = useRef<HTMLDivElement>(null);
@@ -12,6 +14,8 @@ const PaginaInicial: React.FC = () => {
   const [modalSrc, setModalSrc] = useState<string | null>(null);
   const [modalType, setModalType] = useState<"image" | "video">("image");
   const [menuOpen, setMenuOpen] = useState(false);
+  
+  const form = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
@@ -31,6 +35,25 @@ const PaginaInicial: React.FC = () => {
 
   const closeModal = () => {
     setModalSrc(null);
+  };
+
+  const sendEmail = (e: React.FormEvent) => {
+    e.preventDefault();
+  
+    emailjs.sendForm(
+      'service_9bijnlb',
+      'template_ysxiyzk',
+      form.current!,
+      'YZcnjruOTI79ompqD'
+    )
+    .then(() => {
+      alert('Mensaje enviado correctamente ✅');
+      form.current?.reset();
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert('Error al enviar el mensaje ❌');
+    });
   };
 
   return (
@@ -68,7 +91,7 @@ const PaginaInicial: React.FC = () => {
     backgroundImage: 'url("/assets/Grupal1.jpg")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    backgroundAttachment: window.innerWidth >= 768 ? 'fixed' : 'scroll', // solo fijo en desktop
+    backgroundAttachment: window.innerWidth >= 768 ? 'fixed' : 'scroll', 
     height: 'clamp(60vh, 90vh, 100vh)'
   }}
 >
@@ -262,39 +285,46 @@ const PaginaInicial: React.FC = () => {
     
     {/* FORMULARIO */}
     <div className="bg-white rounded-xl shadow-md p-6 sm:p-8 hover:shadow-lg transition">
-      <h2 className="text-3xl font-bold text-[#FFD700] mb-4 text-center">Queremos Escucharte</h2>
-      <p className="text-gray-600 mb-6 text-center">Tu opinión es muy importante para nosotros.</p>
-      <form className="grid gap-5">
-        <input
-          type="text"
-          placeholder="Nombres y Apellidos"
-          className="p-3 border border-gray-300 rounded-lg shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition"
-        />
-        <input
-          type="email"
-          placeholder="Correo electrónico"
-          className="p-3 border border-gray-300 rounded-lg shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition"
-        />
-        <select
-          className="p-3 border border-gray-300 rounded-lg shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition"
-        >
-          <option value="">Tipo de mensaje</option>
-          <option value="sugerencia">Sugerencia</option>
-          <option value="queja">Queja</option>
-          <option value="felicitacion">Felicitación</option>
-        </select>
-        <textarea
-          placeholder="Escribe tu mensaje..."
-          rows={4}
-          className="p-3 border border-gray-300 rounded-lg shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition"
-        />
-        <button
-          type="submit"
-          className="bg-[#FFD700] hover:bg-yellow-400 text-black font-semibold py-3 px-6 rounded-lg transition duration-300 shadow-md"
-        >
-          Enviar Comentario
-        </button>
-      </form>
+    <form className="grid gap-5" onSubmit={sendEmail} ref={form}>
+  <input
+    type="text"
+    name="nombre"
+    placeholder="Nombres y Apellidos"
+    className="p-3 border border-gray-300 rounded-lg shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition"
+    required
+  />
+  <input
+    type="email"
+    name="email"
+    placeholder="Correo electrónico"
+    className="p-3 border border-gray-300 rounded-lg shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition"
+    required
+  />
+  <select
+    name="tipo"
+    className="p-3 border border-gray-300 rounded-lg shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition"
+    required
+  >
+    <option value="">Tipo de mensaje</option>
+    <option value="Sugerencia">Sugerencia</option>
+    <option value="Queja">Queja</option>
+    <option value="Felicitación">Felicitación</option>
+  </select>
+  <textarea
+    name="mensaje"
+    placeholder="Escribe tu mensaje..."
+    rows={4}
+    className="p-3 border border-gray-300 rounded-lg shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition"
+    required
+  />
+  <button
+    type="submit"
+    className="bg-[#FFD700] hover:bg-yellow-400 text-black font-semibold py-3 px-6 rounded-lg transition duration-300 shadow-md"
+  >
+    Enviar Comentario
+  </button>
+</form>
+
     </div>
 
     {/* INFORMACIÓN Y MAPA */}
