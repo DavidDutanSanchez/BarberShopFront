@@ -202,7 +202,7 @@ const PaginaInicial: React.FC = () => {
                 width="100%" height="100%" allowFullScreen loading="lazy" className="border-0 rounded-lg shadow-md"
               />
             </div>
-            <img src="src/Files/rekoj.png" alt="Horario" className="w-32 h-32 mb-4" />
+            <img src="public\assets\rekoj.png" alt="Horario" className="w-32 h-32 mb-4" />
             <h3 className="text-2xl font-bold mb-2">ATENCIÓN TODOS LOS DÍAS</h3>
             <p className="text-xl">09H00 a 20H00</p>
           </div>
