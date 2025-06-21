@@ -1,20 +1,26 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import { FaFacebook, FaInstagram, FaWhatsapp, FaEnvelope } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaWhatsapp, FaEnvelope, FaBars } from "react-icons/fa";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const PaginaInicial: React.FC = () => {
-  
   const seccionMisionVision = useRef<HTMLDivElement>(null);
   const seccionEquipo = useRef<HTMLDivElement>(null);
   const seccionComentarios = useRef<HTMLDivElement>(null);
   const nuestrotrabajo = useRef<HTMLDivElement>(null);
   const [modalSrc, setModalSrc] = useState<string | null>(null);
   const [modalType, setModalType] = useState<"image" | "video">("image");
+  const [menuOpen, setMenuOpen] = useState(false);
 
+  useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
 
   const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
     if (ref.current) {
       ref.current.scrollIntoView({ behavior: "smooth" });
+      setMenuOpen(false);
     }
   };
 
@@ -29,52 +35,62 @@ const PaginaInicial: React.FC = () => {
 
   return (
     <div className="bg-white text-black font-sans">
-
-      {/* Barra de navegación */}
-      <header className="bg-black text-[#FFD700] flex items-center justify-between px-8 py-4 shadow-md">
-        <h1 className="text-2xl font-bold">Pintado Barber Shop</h1>
-        <nav className="flex gap-6 text-lg">
-          <button onClick={() => scrollToSection(seccionMisionVision)} className="hover:text-white transition">Misión y Visión</button>
-          <button onClick={() => scrollToSection(seccionEquipo)} className="hover:text-white transition">Nuestro Equipo</button>
-          <button onClick={() => scrollToSection(seccionComentarios)} className="hover:text-white transition">Contáctanos</button>
-          <button onClick={() => scrollToSection(nuestrotrabajo)} className="hover:text-white transition">Nuestro Trabajo</button>
-        </nav>
-        <Link
-          to="/Login"
-          className="bg-[#FFD700] hover:bg-yellow-400 text-black font-semibold px-5 py-2 rounded transition"
-        >
-          Inicio
-        </Link>
+      <header className="bg-black text-[#FFD700] px-6 py-4 shadow-md sticky top-0 z-50">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold animate-pulse">Pintado Barber Shop</h1>
+          <div className="md:hidden">
+            <button onClick={() => setMenuOpen(!menuOpen)}>
+              <FaBars className="text-2xl" />
+            </button>
+          </div>
+          <nav className="hidden md:flex gap-6 text-lg">
+            <button onClick={() => scrollToSection(seccionMisionVision)} className="hover:text-white transition">Misión y Visión</button>
+            <button onClick={() => scrollToSection(seccionEquipo)} className="hover:text-white transition">Nuestro Equipo</button>
+            <button onClick={() => scrollToSection(seccionComentarios)} className="hover:text-white transition">Contáctanos</button>
+            <button onClick={() => scrollToSection(nuestrotrabajo)} className="hover:text-white transition">Nuestro Trabajo</button>
+          </nav>
+          <Link to="/Login" className="hidden md:inline-block bg-[#FFD700] hover:bg-yellow-400 text-black font-semibold px-5 py-2 rounded transition">Inicio</Link>
+        </div>
+        {menuOpen && (
+          <div className="md:hidden flex flex-col gap-4 mt-4">
+            <button onClick={() => scrollToSection(seccionMisionVision)} className="hover:text-white transition">Misión y Visión</button>
+            <button onClick={() => scrollToSection(seccionEquipo)} className="hover:text-white transition">Nuestro Equipo</button>
+            <button onClick={() => scrollToSection(seccionComentarios)} className="hover:text-white transition">Contáctanos</button>
+            <button onClick={() => scrollToSection(nuestrotrabajo)} className="hover:text-white transition">Nuestro Trabajo</button>
+            <Link to="/Login" className="bg-[#FFD700] hover:bg-yellow-400 text-black font-semibold px-5 py-2 rounded transition text-center">Inicio</Link>
+          </div>
+        )}
       </header>
 
-      {/* Portada */}
       <section
-        className="h-[90vh] bg-cover bg-center flex items-center justify-center relative group transition-all duration-1000 ease-in-out animate-fade-in"
-        style={{ backgroundImage: 'url("/assets/Grupal1.jpg")' }}
+        className="h-[90vh] bg-cover bg-center flex items-center justify-center relative group"
+        style={{ backgroundImage: 'url("/assets/Grupal1.jpg")', backgroundAttachment: 'fixed' }}
       >
-        <div className="absolute bottom-6 left-6 bg-white bg-opacity-90 text-black px-6 py-3 rounded-lg shadow-md text-lg font-semibold tracking-wide animate-slide-up">
-          TU ESTILO EN LAS MEJORES MANOS
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
+        <h2 className="z-10 text-4xl md:text-6xl font-bold text-white text-center px-4 animate-fade-in">
+          TU ESTILO EN LAS <span className="text-[#FFD700]">MEJORES MANOS</span>
+        </h2>
       </section>
 
-      {/* Misión y Visión */}
       <section ref={seccionMisionVision} className="py-20 px-10 grid md:grid-cols-2 gap-10 text-center">
-        {[
-          {
-            titulo: 'Misión',
-            texto: 'En Pintado Barber Shop nos dedicamos a ofrecer servicios de barbería de alta calidad, fusionando estilo, tradición y modernidad. Nuestro compromiso es brindar una experiencia personalizada que resalte la identidad y confianza de cada cliente, en un ambiente profesional, acogedor y con los más altos estándares de higiene y excelencia.'
-          },
-          {
-            titulo: 'Visión',
-            texto: 'Ser la barbería de referencia en Ecuador por nuestra innovación, profesionalismo y dedicación al detalle, consolidándonos como un ícono de estilo y confianza masculina. Aspiramos a expandir nuestra marca, elevando el arte del grooming y empoderando a hombres de todas las edades con estilo y actitud.'
-          },
+        {[{ titulo: 'Misión', texto: 'En Pintado Barber Shop nos dedicamos a ofrecer servicios de barbería de alta calidad, fusionando estilo, tradición y modernidad. Nuestro compromiso es brindar una experiencia personalizada que resalte la identidad y confianza de cada cliente, en un ambiente profesional, acogedor y con los más altos estándares de higiene y excelencia.' },
+          { titulo: 'Visión', texto: 'Ser la barbería de referencia en Ecuador por nuestra innovación, profesionalismo y dedicación al detalle, consolidándonos como un ícono de estilo y confianza masculina. Aspiramos a expandir nuestra marca, elevando el arte del grooming y empoderando a hombres de todas las edades con estilo y actitud.' }
         ].map((item, index) => (
-          <div key={index} className="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300">
+          <div key={index} className="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300" data-aos="zoom-in">
             <h2 className="text-2xl font-bold mb-4 text-[#FFD700]">{item.titulo}</h2>
             <p className="text-gray-700">{item.texto}</p>
           </div>
         ))}
       </section>
+
+      <a
+        href="https://wa.me/593998008311?text=Hola,%20quiero%20agendar%20una%20cita%20en%20Pintado%20Barber%20Shop"
+        className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:scale-110 hover:bg-green-600 transition duration-300 animate-pulse z-50"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <FaWhatsapp size={28} />
+      </a>
 
       {/* Nuestro Equipo + Mensaje */}
       <section ref={seccionEquipo} className="py-20 px-10 bg-gray-100">
