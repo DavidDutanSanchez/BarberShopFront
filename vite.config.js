@@ -8,8 +8,8 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: 'google231bf1fb3f379b3e.html',
-          dest: '' // lo copia en la raíz de dist/
+          src: 'sitemap.xml',
+          dest: '.'
         }
       ]
     })
