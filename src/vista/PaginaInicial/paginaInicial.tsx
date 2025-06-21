@@ -63,14 +63,22 @@ const PaginaInicial: React.FC = () => {
       </header>
 
       <section
-  className="h-[70vh] sm:h-[80vh] md:h-[90vh] bg-cover bg-center flex items-center justify-center relative group"
-  style={{ backgroundImage: 'url("/assets/Grupal1.jpg")', backgroundAttachment: 'fixed' }}
+  className="relative flex items-center justify-center group"
+  style={{
+    backgroundImage: 'url("/assets/Grupal1.jpg")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundAttachment: window.innerWidth >= 768 ? 'fixed' : 'scroll', // solo fijo en desktop
+    height: 'clamp(60vh, 90vh, 100vh)'
+  }}
 >
   <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
-  <h2 className="z-10 text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-white text-center px-4 animate-fade-in leading-snug">
+  <h2 className="z-10 text-center text-white font-bold px-4"
+      style={{ fontSize: 'clamp(1.5rem, 5vw, 4rem)' }}>
     TU ESTILO EN LAS <span className="text-[#FFD700]">MEJORES MANOS</span>
   </h2>
 </section>
+
 
 
       <section ref={seccionMisionVision} className="py-20 px-10 grid md:grid-cols-2 gap-10 text-center">
@@ -115,49 +123,62 @@ const PaginaInicial: React.FC = () => {
         </div>
       </section>
 
-      {/* GALERÍA */}
-      <section ref={nuestrotrabajo} className="py-20 px-10 bg-white border-t border-gray-200">
-        <h2 className="text-3xl font-bold text-center text-[#FFD700] mb-12">Galería de Estilos</h2>
+    {/* GALERÍA */}
+<section
+  ref={nuestrotrabajo}
+  className="py-20 px-4 sm:px-6 bg-gradient-to-b from-zinc-800 to-black text-[#FFD700]"
+>
+  <div className="max-w-7xl mx-auto bg-zinc-900 rounded-2xl shadow-2xl py-12 px-4 sm:px-10 border border-[#FFD700]/20">
 
-        {/* FOTOS */}
-        <div className="mb-16">
-          <h3 className="text-2xl font-bold text-[#FFD700] mb-4">Fotos</h3>
-          <div className="flex overflow-x-auto space-x-6 py-4">
-            {["/assets/1.jpg", "/assets/2.jpg"].map((foto, index) => (
-              <img
-                key={index}
-                src={foto}
-                alt={`Corte ${index + 1}`}
-                className="w-[300px] h-[400px] object-cover rounded-lg shadow-md hover:opacity-80 cursor-pointer transition"
-                onClick={() => openModal(foto, "image")}
-              />
-            ))}
-          </div>
-        </div>
+    {/* TÍTULO PRINCIPAL */}
+    <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12 drop-shadow-lg">
+      Galería de Estilos
+    </h2>
 
-        {/* VIDEOS */}
-        <div>
-          <h3 className="text-2xl font-bold text-[#FFD700] mb-4">Videos</h3>
-          <div className="flex overflow-x-auto space-x-6 py-4">
-            {[
-              "/assets/1.mp4",
-              "/assets/2.mp4",
-              "/assets/3.mp4",
-              "/assets/4.mp4",
-              "/assets/5.mp4"
-            ].map((video, index) => (
-              <video
-                key={index}
-                className="w-[400px] h-[400px] rounded-lg shadow-md cursor-pointer"
-                onClick={() => openModal(video, "video")}
-              >
-                <source src={video} type="video/mp4" />
-                Tu navegador no soporta el video.
-              </video>
-            ))}
-          </div>
-        </div>
-      </section>
+    {/* FOTOS */}
+    <div className="mb-16">
+      <h3 className="text-2xl font-bold mb-4">Fotos</h3>
+      <div className="flex overflow-x-auto gap-6 py-4 scrollbar-thin scrollbar-thumb-[#FFD700]/70 scrollbar-track-zinc-700">
+        {["/assets/1.jpg", "/assets/2.jpg"].map((foto, index) => (
+          <img
+            key={index}
+            src={foto}
+            alt={`Corte ${index + 1}`}
+            className="w-60 sm:w-72 md:w-80 h-auto object-cover rounded-xl border-2 border-[#FFD700]/30 hover:border-[#FFD700] shadow-md hover:shadow-xl hover:scale-105 transition duration-300 cursor-pointer"
+            onClick={() => openModal(foto, "image")}
+          />
+        ))}
+      </div>
+    </div>
+
+    {/* VIDEOS */}
+    <div>
+      <h3 className="text-2xl font-bold mb-4">Videos</h3>
+      <div className="flex overflow-x-auto gap-6 py-4 scrollbar-thin scrollbar-thumb-[#FFD700]/70 scrollbar-track-zinc-700">
+        {[
+          "/assets/1.mp4",
+          "/assets/2.mp4",
+          "/assets/3.mp4",
+          "/assets/4.mp4",
+          "/assets/5.mp4"
+        ].map((video, index) => (
+          <video
+            key={index}
+            className="w-72 sm:w-80 md:w-96 rounded-xl border-2 border-[#FFD700]/30 hover:border-[#FFD700] shadow-md hover:shadow-xl hover:scale-105 transition duration-300 cursor-pointer"
+            onClick={() => openModal(video, "video")}
+            controls
+          >
+            <source src={video} type="video/mp4" />
+            Tu navegador no soporta el video.
+          </video>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
 
       {/* MODAL */}
       {modalSrc && (
@@ -191,56 +212,105 @@ const PaginaInicial: React.FC = () => {
       )}
 
       {/* Comentarios + Horario + Mapa */}
-      <section ref={seccionComentarios} className="py-20 px-6 bg-white border-t-2 border-gray-200">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-start">
-          <div>
-            <h2 className="text-3xl font-bold text-[#FFD700] mb-4">Queremos Escucharte</h2>
-            <p className="text-gray-600 mb-6">Tu opinión es muy importante para nosotros.</p>
-            <form className="grid gap-6">
-              <input type="text" placeholder="Nombres y Apellidos" className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFD700]" />
-              <input type="email" placeholder="Correo electrónico" className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFD700]" />
-              <select className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFD700]">
-                <option value="">Tipo de mensaje</option>
-                <option value="sugerencia">Sugerencia</option>
-                <option value="queja">Queja</option>
-                <option value="felicitacion">Felicitación</option>
-              </select>
-              <textarea placeholder="Escribe tu mensaje..." rows={4} className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFD700]" />
-              <button type="submit" className="bg-[#FFD700] hover:bg-yellow-400 text-black font-semibold py-3 px-6 rounded-lg transition duration-300">
-                Enviar Comentario
-              </button>
-            </form>
-          </div>
-          <div className="flex flex-col items-center justify-center bg-black text-[#FFD700] p-8 rounded-xl shadow-md text-center">
-            <div className="w-full h-64 mb-6 rounded-lg overflow-hidden shadow-md">
-              <iframe
-                title="Ubicación de Pintado Barber Shop"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4519.5889706514245!2d-78.76568302447637!3d-2.7791987390814468!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91cd0da76aad0671%3A0x74807bd715066d90!2sPINTADO%20BARBER%20SHOP!5e1!3m2!1ses!2sec!4v1746228727422!5m2!1ses!2sec"
-                width="100%" height="100%" allowFullScreen loading="lazy" className="border-0 rounded-lg shadow-md"
-              />
-            </div>
-            <img src="/assets/rekoj.png" alt="Horario" className="w-32 h-32 mb-4" />
-            <h3 className="text-2xl font-bold mb-2">ATENCIÓN TODOS LOS DÍAS</h3>
-            <p className="text-xl">09H00 a 20H00</p>
-          </div>
-        </div>
-      </section>
+      <section ref={seccionComentarios} className="py-20 px-4 sm:px-6 bg-white border-t-2 border-gray-200">
+  <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+    
+    {/* FORMULARIO */}
+    <div className="bg-white rounded-xl shadow-md p-6 sm:p-8 hover:shadow-lg transition">
+      <h2 className="text-3xl font-bold text-[#FFD700] mb-4 text-center">Queremos Escucharte</h2>
+      <p className="text-gray-600 mb-6 text-center">Tu opinión es muy importante para nosotros.</p>
+      <form className="grid gap-5">
+        <input
+          type="text"
+          placeholder="Nombres y Apellidos"
+          className="p-3 border border-gray-300 rounded-lg shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition"
+        />
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          className="p-3 border border-gray-300 rounded-lg shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition"
+        />
+        <select
+          className="p-3 border border-gray-300 rounded-lg shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition"
+        >
+          <option value="">Tipo de mensaje</option>
+          <option value="sugerencia">Sugerencia</option>
+          <option value="queja">Queja</option>
+          <option value="felicitacion">Felicitación</option>
+        </select>
+        <textarea
+          placeholder="Escribe tu mensaje..."
+          rows={4}
+          className="p-3 border border-gray-300 rounded-lg shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition"
+        />
+        <button
+          type="submit"
+          className="bg-[#FFD700] hover:bg-yellow-400 text-black font-semibold py-3 px-6 rounded-lg transition duration-300 shadow-md"
+        >
+          Enviar Comentario
+        </button>
+      </form>
+    </div>
+
+    {/* INFORMACIÓN Y MAPA */}
+    <div className="flex flex-col items-center justify-center bg-black text-[#FFD700] p-6 sm:p-8 rounded-xl shadow-md text-center">
+      <div className="w-full h-64 mb-6 rounded-lg overflow-hidden shadow-md">
+        <iframe
+          title="Ubicación de Pintado Barber Shop"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4519.5889706514245!2d-78.76568302447637!3d-2.7791987390814468!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91cd0da76aad0671%3A0x74807bd715066d90!2sPINTADO%20BARBER%20SHOP!5e1!3m2!1ses!2sec!4v1746228727422!5m2!1ses!2sec"
+          width="100%" height="100%" allowFullScreen loading="lazy"
+          className="border-0 rounded-lg shadow-md"
+        />
+      </div>
+      <img src="/assets/rekoj.png" alt="Horario" className="w-28 h-28 sm:w-32 sm:h-32 mb-4" />
+      <h3 className="text-2xl font-bold mb-1">ATENCIÓN TODOS LOS DÍAS</h3>
+      <p className="text-lg sm:text-xl">09H00 a 20H00</p>
+    </div>
+  </div>
+</section>
 
       {/* Redes sociales */}
-      <footer className="py-8 bg-black text-[#FFD700] flex justify-center space-x-8 text-xl">
-        <a href="https://www.facebook.com/share/1BjBkJoYvV/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="hover:text-white transition duration-300 hover:scale-110 flex items-center gap-2">
-          <FaFacebook /> Facebook
-        </a>
-        <a href="https://www.instagram.com/pintadobarbershop.ec?igsh=MWNyd2J1NWxscXM1bQ==" target="_blank" rel="noopener noreferrer" className="hover:text-white transition duration-300 hover:scale-110 flex items-center gap-2">
-          <FaInstagram /> Instagram
-        </a>
-        <a href="https://wa.me/593998008311?text=Hola%2C%20quiero%20agendar%20una%20cita%20en%20Pintado%20Barber%20Shop" target="_blank" rel="noopener noreferrer" className="hover:text-white transition duration-300 hover:scale-110 flex items-center gap-2">
-          <FaWhatsapp /> WhatsApp
-        </a>
-        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ahitofelpintado@gmail.com&su=Agendar%20Cita&body=Hola,%20quisiera%20agendar%20una%20cita%20en%20Pintado%20Barber%20Shop." target="_blank" rel="noopener noreferrer" className="hover:text-white transition duration-300 hover:scale-110 flex items-center gap-2">
-          <FaEnvelope /> Email
-        </a>
-      </footer>
+      <footer className="py-10 bg-black text-[#FFD700] text-center">
+  <h3 className="text-2xl font-bold mb-6">¡Síguenos en nuestras redes!</h3>
+  <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-6 sm:gap-8 text-lg sm:text-xl">
+    <a
+      href="https://www.facebook.com/share/1BjBkJoYvV/?mibextid=wwXIfr"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 px-5 py-3 bg-[#1a1a1a] rounded-lg hover:bg-[#3b5998] hover:text-white hover:scale-105 transition duration-300 shadow-md"
+    >
+      <FaFacebook size={24} /> Facebook
+    </a>
+
+    <a
+      href="https://www.instagram.com/pintadobarbershop.ec?igsh=MWNyd2J1NWxscXM1bQ=="
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 px-5 py-3 bg-[#1a1a1a] rounded-lg hover:bg-pink-600 hover:text-white hover:scale-105 transition duration-300 shadow-md"
+    >
+      <FaInstagram size={24} /> Instagram
+    </a>
+
+    <a
+      href="https://wa.me/593998008311?text=Hola%2C%20quiero%20agendar%20una%20cita%20en%20Pintado%20Barber%20Shop"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 px-5 py-3 bg-[#1a1a1a] rounded-lg hover:bg-green-600 hover:text-white hover:scale-105 transition duration-300 shadow-md"
+    >
+      <FaWhatsapp size={24} /> WhatsApp
+    </a>
+
+    <a
+      href="https://mail.google.com/mail/?view=cm&fs=1&to=ahitofelpintado@gmail.com&su=Agendar%20Cita&body=Hola,%20quisiera%20agendar%20una%20cita%20en%20Pintado%20Barber%20Shop."
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 px-5 py-3 bg-[#1a1a1a] rounded-lg hover:bg-red-600 hover:text-white hover:scale-105 transition duration-300 shadow-md"
+    >
+      <FaEnvelope size={24} /> Email
+    </a>
+  </div>
+</footer>
+
     </div>
   );
 };
