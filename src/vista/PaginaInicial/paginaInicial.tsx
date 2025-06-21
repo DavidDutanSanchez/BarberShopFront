@@ -81,16 +81,33 @@ const PaginaInicial: React.FC = () => {
 
 
 
-      <section ref={seccionMisionVision} className="py-20 px-10 grid md:grid-cols-2 gap-10 text-center">
-        {[{ titulo: 'Misión', texto: 'En Pintado Barber Shop nos dedicamos a ofrecer servicios de barbería de alta calidad, fusionando estilo, tradición y modernidad. Nuestro compromiso es brindar una experiencia personalizada que resalte la identidad y confianza de cada cliente, en un ambiente profesional, acogedor y con los más altos estándares de higiene y excelencia.' },
-          { titulo: 'Visión', texto: 'Ser la barbería de referencia en Ecuador por nuestra innovación, profesionalismo y dedicación al detalle, consolidándonos como un ícono de estilo y confianza masculina. Aspiramos a expandir nuestra marca, elevando el arte del grooming y empoderando a hombres de todas las edades con estilo y actitud.' }
-        ].map((item, index) => (
-          <div key={index} className="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300" data-aos="zoom-in">
-            <h2 className="text-2xl font-bold mb-4 text-[#FFD700]">{item.titulo}</h2>
-            <p className="text-gray-700">{item.texto}</p>
-          </div>
-        ))}
-      </section>
+<section
+  ref={seccionMisionVision}
+  className="py-20 px-4 sm:px-6 bg-gradient-to-br from-white via-gray-100 to-white"
+>
+  <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 text-center sm:text-left">
+    {[{
+      titulo: 'Misión',
+      texto:
+        'En Pintado Barber Shop nos dedicamos a ofrecer servicios de barbería de alta calidad, fusionando estilo, tradición y modernidad. Nuestro compromiso es brindar una experiencia personalizada que resalte la identidad y confianza de cada cliente, en un ambiente profesional, acogedor y con los más altos estándares de higiene y excelencia.'
+    },
+    {
+      titulo: 'Visión',
+      texto:
+        'Ser la barbería de referencia en Ecuador por nuestra innovación, profesionalismo y dedicación al detalle, consolidándonos como un ícono de estilo y confianza masculina. Aspiramos a expandir nuestra marca, elevando el arte del grooming y empoderando a hombres de todas las edades con estilo y actitud.'
+    }].map((item, index) => (
+      <div
+        key={index}
+        className="bg-white border-2 border-[#FFD700]/30 hover:border-[#FFD700] p-8 sm:p-10 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-[1.03]"
+        data-aos="zoom-in"
+      >
+        <h2 className="text-3xl font-bold text-[#FFD700] mb-4">{item.titulo}</h2>
+        <p className="text-gray-700 text-justify leading-relaxed">{item.texto}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
 
       <a
         href="https://wa.me/593998008311?text=Hola,%20quiero%20agendar%20una%20cita%20en%20Pintado%20Barber%20Shop"
@@ -102,26 +119,54 @@ const PaginaInicial: React.FC = () => {
       </a>
 
       {/* Nuestro Equipo + Mensaje */}
-      <section ref={seccionEquipo} className="py-20 px-10 bg-gray-100">
-        <h2 className="text-3xl font-bold text-center mb-12 text-[#FFD700]">Nuestro Equipo</h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition flex flex-col items-center">
-            <h3 className="text-2xl font-bold text-[#FFD700] mb-4 text-center">Grupo de Barberos Profesionales</h3>
-            <img src="/assets/Grupal2.jpg" alt="Grupo de barberos" className="w-full h-[450px] object-cover rounded-lg mb-4" />
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition flex flex-col items-center">
-            <img src="/assets/Pintado.jpg" alt="CEO Ahitofel Pintado" className="w-full h-[450px] object-contain rounded-lg mb-4" />
-            <h3 className="text-2xl font-bold text-black text-center mb-1">Ahitofel luztein pintado calle</h3>
-            <p className="text-gray-600 text-center">CEO & BARBERO PROFESIONAL</p>
-          </div>
-        </div>
-        <div className="mt-10 bg-white p-6 rounded-xl shadow-md max-w-5xl mx-auto text-center hover:shadow-xl transition">
-          <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Mensaje</h2>
-          <p className="text-gray-700 text-lg">
-            En Pintado Barber Shop no solo cortamos cabello: creamos estilo, confianza y actitud. Cada visita es una experiencia pensada para ti, donde la tradición se encuentra con la innovación y el talento de nuestros barberos transforma tu imagen. Si buscas precisión, profesionalismo y una atención que marque la diferencia… Este es tu lugar.
-          </p>
-        </div>
-      </section>
+  {/* Nuestro Equipo + Mensaje */}
+<section ref={seccionEquipo} className="py-20 px-4 sm:px-8 bg-gradient-to-b from-gray-100 via-white to-gray-100">
+  <h2 className="text-4xl font-bold text-center mb-16 text-[#FFD700] drop-shadow-lg">
+    Nuestro Equipo
+  </h2>
+
+  <div className="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto">
+    {/* Tarjeta Barberos */}
+    <div className="bg-white border-2 border-[#FFD700]/40 hover:border-[#FFD700] p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 flex flex-col items-center text-center">
+      <h3 className="text-2xl font-bold text-[#FFD700] mb-4">Barberos Profesionales</h3>
+      <img
+        src="/assets/Grupal2.jpg"
+        alt="Grupo de barberos"
+        className="w-full h-[400px] object-cover rounded-xl mb-4 shadow-md"
+      />
+      <p className="text-gray-700 text-md">
+        Un equipo apasionado y con experiencia que transforma cada corte en una obra de arte.
+      </p>
+    </div>
+
+    {/* Tarjeta CEO */}
+    <div className="bg-white border-2 border-[#FFD700]/40 hover:border-[#FFD700] p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 flex flex-col items-center text-center">
+      <img
+        src="/assets/Pintado.jpg"
+        alt="CEO Ahitofel Pintado"
+        className="w-full h-[400px] object-contain rounded-xl mb-4 shadow-md"
+      />
+      <h3 className="text-2xl font-bold text-black mb-1">Ahitofel Luztein Pintado Calle</h3>
+      <p className="text-gray-600 mb-2">CEO & BARBERO PROFESIONAL</p>
+      <p className="text-gray-700 text-md">
+        Lidera con visión, arte y compromiso, guiando a nuestro equipo a ofrecer excelencia.
+      </p>
+    </div>
+  </div>
+
+  {/* Mensaje Especial */}
+  <div className="mt-16 max-w-4xl mx-auto bg-black text-[#FFD700] rounded-2xl shadow-lg hover:shadow-2xl transition p-8 sm:p-10 text-center">
+    <h2 className="text-3xl font-bold mb-4">Mensaje</h2>
+    <p className="text-lg text-gray-200 leading-relaxed">
+      En <strong className="text-[#FFD700]">Pintado Barber Shop</strong> no solo cortamos cabello:
+      creamos estilo, confianza y actitud. Cada visita es una experiencia diseñada para ti, donde
+      la tradición se une con la innovación y el talento de nuestros barberos transforma tu imagen.
+      <br className="hidden sm:block" />
+      Si buscas precisión, profesionalismo y una atención que marque la diferencia… este es tu lugar.
+    </p>
+  </div>
+</section>
+
 
     {/* GALERÍA */}
 <section
