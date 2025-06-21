@@ -207,7 +207,7 @@ const PaginaInicial: React.FC = () => {
           <div className="mb-16">
             <h3 className="text-2xl font-bold mb-4">Fotos</h3>
             <div className="flex overflow-x-auto gap-6 py-4 scrollbar-thin scrollbar-thumb-[#FFD700]/70 scrollbar-track-zinc-700">
-              {["/assets/1.jpg", "/assets/2.jpg",  "/assets/Imagen5.jpg"].map((foto, index) => (
+              {["/assets/1.jpg", "/assets/2.jpg", "/assets/Imagen5.jpg"].map((foto, index) => (
                 <img
                   key={index}
                   src={foto}
@@ -221,7 +221,7 @@ const PaginaInicial: React.FC = () => {
 
           {/* VIDEOS */}
           <div>
-            <h3 className="text-2xl font-bold mb-4">Videos</h3>
+            <h3 className="text-2xl font-bold mb-4 text-[#FFD700]">Videos</h3>
             <div className="flex overflow-x-auto gap-6 py-4 scrollbar-thin scrollbar-thumb-[#FFD700]/70 scrollbar-track-zinc-700">
               {[
                 "/assets/1.mp4",
@@ -234,9 +234,12 @@ const PaginaInicial: React.FC = () => {
               ].map((video, index) => (
                 <video
                   key={index}
-                  className="w-72 sm:w-80 md:w-96 rounded-xl border-2 border-[#FFD700]/30 hover:border-[#FFD700] shadow-md hover:shadow-xl hover:scale-105 transition duration-300 cursor-pointer"
+                  className="w-72 sm:w-80 md:w-96 rounded-xl border-2 border-[#FFD700]/30 hover:border-[#FFD700] shadow-md hover:shadow-xl hover:scale-105 transition duration-300"
                   onClick={() => openModal(video, "video")}
                   controls
+                  playsInline
+                  preload="metadata"
+                  muted
                 >
                   <source src={video} type="video/mp4" />
                   Tu navegador no soporta el video.
@@ -244,6 +247,7 @@ const PaginaInicial: React.FC = () => {
               ))}
             </div>
           </div>
+
 
         </div>
       </section>
