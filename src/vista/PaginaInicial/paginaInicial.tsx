@@ -34,7 +34,7 @@ const PaginaInicial: React.FC = () => {
   };
 
   return (
-    <div className="bg-white text-black font-sans">
+    <div className="bg-white text-black font-sans w-full overflow-x-hidden">
       <header className="bg-black text-[#FFD700] px-6 py-4 shadow-md sticky top-0 z-50">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold animate-pulse">Pintado Barber Shop</h1>
@@ -63,14 +63,15 @@ const PaginaInicial: React.FC = () => {
       </header>
 
       <section
-        className="h-[90vh] bg-cover bg-center flex items-center justify-center relative group"
-        style={{ backgroundImage: 'url("/assets/Grupal1.jpg")', backgroundAttachment: 'fixed' }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
-        <h2 className="z-10 text-4xl md:text-6xl font-bold text-white text-center px-4 animate-fade-in">
-          TU ESTILO EN LAS <span className="text-[#FFD700]">MEJORES MANOS</span>
-        </h2>
-      </section>
+  className="h-[70vh] sm:h-[80vh] md:h-[90vh] bg-cover bg-center flex items-center justify-center relative group"
+  style={{ backgroundImage: 'url("/assets/Grupal1.jpg")', backgroundAttachment: 'fixed' }}
+>
+  <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
+  <h2 className="z-10 text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-white text-center px-4 animate-fade-in leading-snug">
+    TU ESTILO EN LAS <span className="text-[#FFD700]">MEJORES MANOS</span>
+  </h2>
+</section>
+
 
       <section ref={seccionMisionVision} className="py-20 px-10 grid md:grid-cols-2 gap-10 text-center">
         {[{ titulo: 'Misión', texto: 'En Pintado Barber Shop nos dedicamos a ofrecer servicios de barbería de alta calidad, fusionando estilo, tradición y modernidad. Nuestro compromiso es brindar una experiencia personalizada que resalte la identidad y confianza de cada cliente, en un ambiente profesional, acogedor y con los más altos estándares de higiene y excelencia.' },
