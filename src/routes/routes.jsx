@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "../vista/login/login";
+import Login from "../vista/login/View/login";
 import MainMenu from "../vista/MainMenu/MainMenu";
 import PaginaInicial from "../vista/PaginaInicial/paginaInicial";
 import PersonaView from "../Personas/View/Persona"; 

@@ -33,11 +33,11 @@ export default function Layout() {
   const menuItems = [
     { label: "Registro de Personas", to: "/Empleados", icon: <Person /> },
     { label: "Gestion Usuarios", to: "/Usuarios", icon: <Person /> },
-    { label: "Reportes", to: "/Login", icon: <BarChart /> },
-    { label: "Cortes", to: "/Login", icon: <ContentCut /> },
+    { label: "Reportes", to: "/Reportes", icon: <BarChart /> },
+    { label: "Cortes", to: "/Cortes", icon: <ContentCut /> },
     { label: "Productos", to: "/Productos", icon: <Inventory /> },
-    { label: "Pagina", to: "/Productos", icon: <Web /> },
-    { label: "Configuracion", to: "/Login", icon: <Settings /> },
+    { label: "Pagina", to: "/Pagina", icon: <Web /> },
+    { label: "Configuracion", to: "/Configuracion", icon: <Settings /> },
     { label: "Salir", to: "/Login", icon: <Logout /> },
 
   ];
