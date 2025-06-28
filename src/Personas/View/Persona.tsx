@@ -1,70 +1,66 @@
 import React, { useEffect, useState } from "react";
 import {
-  Box, Typography, Button, Dialog, DialogTitle,
-  DialogContent, DialogActions, TextField
+  Box, Button, Dialog, DialogActions,
+  DialogContent, DialogTitle, TextField, Typography
 } from "@mui/material";
 import { Persona } from "../Model/Persona";
 import {
-  getAllPersonas,
-  addPersona,
-  updatePersona,
-  deletePersona
+  getAllPersonas, addPersona, updatePersona, deletePersona
 } from "../Controller/Persona";
 import PersonaTabla from "./personaTabla";
+import { Link } from "react-router-dom";
 
 const PersonaView = () => {
   const [personas, setPersonas] = useState<Persona[]>([]);
   const [formData, setFormData] = useState<Persona>({
+    idPersona: "",
     cedulaPersona: "",
     nombresPersona: "",
     apellidosPersona: "",
     direccionPersona: "",
+    fechaNacimientoPersona: "",
     celularPersona: "",
-    correoPersona: ""
+    correoPersona: "",
   });
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchData = async () => {
-    setLoading(true);
-    setError(null);
     try {
-      const res = await getAllPersonas();
-      setPersonas(Array.isArray(res.data) ? res.data : []);
+      const data = await getAllPersonas();
+      setPersonas(data);
     } catch (err) {
-      setError("Error al obtener la lista de personas.");
-    } finally {
-      setLoading(false);
+      console.error("Error al obtener personas:", err);
     }
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      const data = await getAllPersonas();
+      setPersonas(data);
+    };
+  
     fetchData();
   }, []);
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async () => {
-    // Validación básica
-    if (!formData.nombresPersona || !formData.apellidosPersona || !formData.cedulaPersona) {
-      alert("Por favor completa al menos nombre, apellido y cédula.");
-      return;
-    }
-
     try {
       if (isEdit) {
         await updatePersona(formData);
       } else {
-        await addPersona(formData);
+        const { idPersona, ...rest } = formData;
+        await addPersona(rest);
       }
       handleClose();
       fetchData();
-    } catch (error) {
-      console.error("Error al guardar persona:", error);
+    } catch (err) {
+      console.error("Error al guardar persona:", err);
     }
   };
 
@@ -75,11 +71,10 @@ const PersonaView = () => {
   };
 
   const handleDelete = async (id: string) => {
-    try {
+    const confirmed = window.confirm("¿Deseas eliminar esta persona?");
+    if (confirmed) {
       await deletePersona(id);
       fetchData();
-    } catch (err) {
-      console.error("Error al eliminar persona:", err);
     }
   };
 
@@ -87,55 +82,58 @@ const PersonaView = () => {
     setOpen(false);
     setIsEdit(false);
     setFormData({
+      idPersona: "",
       cedulaPersona: "",
       nombresPersona: "",
       apellidosPersona: "",
       direccionPersona: "",
+      fechaNacimientoPersona: "",
       celularPersona: "",
-      correoPersona: ""
+      correoPersona: "",
     });
   };
 
   return (
     <Box p={4}>
-      <Typography variant="h4" gutterBottom>Gestión de Personas</Typography>
+     
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+  <Typography variant="h4">Gestión de Personas</Typography>
+  <Button
+    variant="outlined"
+    component={Link}
+    to="/MainMenu"
+    color="secondary"
+  >
+    Volver al Menú
+  </Button>
+</Box>
+      
+      <Button variant="contained" onClick={() => setOpen(true)}>Agregar Persona</Button>
 
-      {loading && <Typography color="gray">Cargando datos...</Typography>}
-      {error && <Typography color="error">{error}</Typography>}
-
-      {!loading && !error && (
-        <>
-          <Button variant="contained" onClick={() => setOpen(true)} sx={{ mb: 2 }}>
-            Agregar Persona
-          </Button>
-
-          <PersonaTabla
-            personas={personas}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        </>
-      )}
+      <PersonaTabla personas={personas} onEdit={handleEdit} onDelete={handleDelete} />
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{isEdit ? "Editar Persona" : "Agregar Persona"}</DialogTitle>
         <DialogContent>
           {[
-            "nombresPersona",
-            "apellidosPersona",
-            "cedulaPersona",
-            "direccionPersona",
-            "celularPersona",
-            "correoPersona"
-          ].map((field) => (
+            { name: "cedulaPersona", label: "Cédula" },
+            { name: "nombresPersona", label: "Nombres" },
+            { name: "apellidosPersona", label: "Apellidos" },
+            { name: "direccionPersona", label: "Dirección" },
+            { name: "fechaNacimientoPersona", label: "Fecha Nacimiento", type: "date" },
+            { name: "celularPersona", label: "Celular" },
+            { name: "correoPersona", label: "Correo" }
+          ].map(({ name, label, type = "text" }) => (
             <TextField
-              key={field}
-              label={field}
-              name={field}
-              value={formData?.[field as keyof Persona] ?? ""}
+              key={name}
+              label={label}
+              name={name}
+              type={type}
+              value={formData[name as keyof Persona]}
               onChange={handleChange}
               fullWidth
               margin="dense"
+              InputLabelProps={type === "date" ? { shrink: true } : undefined}
             />
           ))}
         </DialogContent>

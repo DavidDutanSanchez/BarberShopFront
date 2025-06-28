@@ -11,16 +11,20 @@ import {
   deleteProducto
 } from "../Controller/Producto";
 import ProductoTabla from "./productoTabla";
+import { Link } from "react-router-dom";
+
 
 
 const ProductoView = () => {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [formData, setFormData] = useState<Producto>({
+    idproductos: "",
     nombreProducto: "",
-    costoProducto: 0,
+    costroProducto: 0,
     stockProducto: 0,
     ivaProducto: 0,
-    codigoProducto: ""
+    codigoProducto: "",
+    detalle_tickets: undefined
   });
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -31,15 +35,18 @@ const ProductoView = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await getAllProductos();
-      setProductos(Array.isArray(res.data) ? res.data : []);
+      const productos = await getAllProductos();
+      console.log("📦 Productos recibidos:", productos);
+      setProductos(productos);
     } catch (err) {
+      console.error("Error al obtener los productos:", err);
       setError("Error al obtener los productos.");
     } finally {
       setLoading(false);
     }
   };
-
+  
+ 
   useEffect(() => {
     fetchData();
   }, []);
@@ -57,15 +64,24 @@ const ProductoView = () => {
       alert("El nombre y código del producto son obligatorios.");
       return;
     }
-
+  
     try {
-      isEdit ? await updateProducto(formData) : await addProducto(formData);
+      if (isEdit) {
+        const confirmed = window.confirm("¿Estás seguro de que deseas actualizar este producto?");
+        if (!confirmed) return;
+  
+        await updateProducto(formData);
+      } else {
+        const { idproductos, ...productoSinId } = formData;
+        await addProducto(productoSinId);
+      }
+  
       handleClose();
       fetchData();
     } catch (error) {
       console.error("Error al guardar el producto:", error);
     }
-  };
+  };  
 
   const handleEdit = (producto: Producto) => {
     setFormData(producto);
@@ -74,6 +90,9 @@ const ProductoView = () => {
   };
 
   const handleDelete = async (id: string) => {
+    const confirm = window.confirm("¿Estás seguro de eliminar este producto?");
+    if (!confirm) return;
+  
     try {
       await deleteProducto(id);
       fetchData();
@@ -81,22 +100,35 @@ const ProductoView = () => {
       console.error("Error al eliminar producto:", err);
     }
   };
+  
 
   const handleClose = () => {
     setOpen(false);
     setIsEdit(false);
     setFormData({
+      idproductos: "",
       nombreProducto: "",
-      costoProducto: 0,
+      costroProducto: 0,
       stockProducto: 0,
       ivaProducto: 0,
-      codigoProducto: ""
+      codigoProducto: "",
+      detalle_tickets: undefined
     });
   };
 
   return (
     <Box p={4}>
-      <Typography variant="h4" gutterBottom>Gestión de Productos</Typography>
+     <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+  <Typography variant="h4">Gestión de Productos</Typography>
+  <Button
+    variant="outlined"
+    component={Link}
+    to="/MainMenu"
+    color="secondary"
+  >
+    Volver al Menú
+  </Button>
+</Box>
 
       {loading && <Typography color="gray">Cargando productos...</Typography>}
       {error && <Typography color="error">{error}</Typography>}
@@ -121,7 +153,7 @@ const ProductoView = () => {
           {[
             { name: "nombreProducto", label: "Nombre" },
             { name: "codigoProducto", label: "Código" },
-            { name: "costoProducto", label: "Costo" },
+            { name: "costroProducto", label: "Costo" },
             { name: "stockProducto", label: "Stock" },
             { name: "ivaProducto", label: "IVA (%)" },
           ].map(({ name, label }) => (
@@ -133,7 +165,7 @@ const ProductoView = () => {
               onChange={handleChange}
               fullWidth
               margin="dense"
-              type={["costoProducto", "stockProducto", "ivaProducto"].includes(name) ? "number" : "text"}
+              type={["costroProducto", "stockProducto", "ivaProducto"].includes(name) ? "number" : "text"}
             />
           ))}
         </DialogContent>

@@ -1,5 +1,4 @@
 import React from "react";
-
 import {
   Table, TableBody, TableCell, TableHead, TableRow, IconButton
 } from "@mui/material";
@@ -29,7 +28,7 @@ const ProductoTabla: React.FC<Props> = ({ productos, onEdit, onDelete }) => (
         <TableRow key={p.idproductos}>
           <TableCell>{p.nombreProducto}</TableCell>
           <TableCell>{p.codigoProducto}</TableCell>
-          <TableCell>{p.costoProducto}</TableCell>
+          <TableCell>{p.costroProducto}</TableCell>
           <TableCell>{p.stockProducto}</TableCell>
           <TableCell>{p.ivaProducto}%</TableCell>
           <TableCell>

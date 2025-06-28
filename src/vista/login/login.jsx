@@ -12,7 +12,8 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    navigate("/Login");
+    //navigate("/Login");
+    navigate("/MainMenu");
   };
 
   const handleCancel = () => {

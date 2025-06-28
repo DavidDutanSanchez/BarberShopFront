@@ -31,7 +31,8 @@ export default function Layout() {
   }, []);
 
   const menuItems = [
-    { label: "Registro de Empleados", to: "/Empleados", icon: <Person /> },
+    { label: "Registro de Personas", to: "/Empleados", icon: <Person /> },
+    { label: "Gestion Usuarios", to: "/Usuarios", icon: <Person /> },
     { label: "Reportes", to: "/Login", icon: <BarChart /> },
     { label: "Cortes", to: "/Login", icon: <ContentCut /> },
     { label: "Productos", to: "/Productos", icon: <Inventory /> },

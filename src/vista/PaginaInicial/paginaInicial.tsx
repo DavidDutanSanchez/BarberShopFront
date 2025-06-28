@@ -142,7 +142,6 @@ const PaginaInicial: React.FC = () => {
       </a>
 
       {/* Nuestro Equipo + Mensaje */}
-      {/* Nuestro Equipo + Mensaje */}
       <section ref={seccionEquipo} className="py-20 px-4 sm:px-8 bg-gradient-to-b from-gray-100 via-white to-gray-100">
         <h2 className="text-4xl font-bold text-center mb-16 text-[#FFD700] drop-shadow-lg">
           Nuestro Equipo
