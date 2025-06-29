@@ -12,19 +12,17 @@ import {
 } from "../Controller/Producto";
 import ProductoTabla from "./productoTabla";
 import { Link } from "react-router-dom";
-
-
+import { v4 as uuidv4 } from 'uuid'
 
 const ProductoView = () => {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [formData, setFormData] = useState<Producto>({
-    idproductos: "",
+    idproductos: uuidv4(),
     nombreProducto: "",
     costroProducto: 0,
     stockProducto: 0,
     ivaProducto: 0,
     codigoProducto: "",
-    detalle_tickets: undefined
   });
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -35,8 +33,7 @@ const ProductoView = () => {
     setLoading(true);
     setError(null);
     try {
-      const productos = await getAllProductos();
-      console.log("📦 Productos recibidos:", productos);
+      const productos = (await getAllProductos({})).data;
       setProductos(productos);
     } catch (err) {
       console.error("Error al obtener los productos:", err);
@@ -45,8 +42,8 @@ const ProductoView = () => {
       setLoading(false);
     }
   };
-  
- 
+
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -64,24 +61,24 @@ const ProductoView = () => {
       alert("El nombre y código del producto son obligatorios.");
       return;
     }
-  
+
     try {
       if (isEdit) {
         const confirmed = window.confirm("¿Estás seguro de que deseas actualizar este producto?");
         if (!confirmed) return;
-  
-        await updateProducto(formData);
+
+        await updateProducto({ payload: formData });
       } else {
-        const { idproductos, ...productoSinId } = formData;
-        await addProducto(productoSinId);
+        console.log("Agregando producto:", formData);
+        await addProducto({ payload: formData });
       }
-  
+
       handleClose();
       fetchData();
     } catch (error) {
       console.error("Error al guardar el producto:", error);
     }
-  };  
+  };
 
   const handleEdit = (producto: Producto) => {
     setFormData(producto);
@@ -92,7 +89,7 @@ const ProductoView = () => {
   const handleDelete = async (id: string) => {
     const confirm = window.confirm("¿Estás seguro de eliminar este producto?");
     if (!confirm) return;
-  
+
     try {
       await deleteProducto(id);
       fetchData();
@@ -100,7 +97,7 @@ const ProductoView = () => {
       console.error("Error al eliminar producto:", err);
     }
   };
-  
+
 
   const handleClose = () => {
     setOpen(false);
@@ -112,23 +109,22 @@ const ProductoView = () => {
       stockProducto: 0,
       ivaProducto: 0,
       codigoProducto: "",
-      detalle_tickets: undefined
     });
   };
 
   return (
     <Box p={4}>
-     <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-  <Typography variant="h4">Gestión de Productos</Typography>
-  <Button
-    variant="outlined"
-    component={Link}
-    to="/MainMenu"
-    color="secondary"
-  >
-    Volver al Menú
-  </Button>
-</Box>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+        <Typography variant="h4">Gestión de Productos</Typography>
+        <Button
+          variant="outlined"
+          component={Link}
+          to="/MainMenu"
+          color="secondary"
+        >
+          Volver al Menú
+        </Button>
+      </Box>
 
       {loading && <Typography color="gray">Cargando productos...</Typography>}
       {error && <Typography color="error">{error}</Typography>}

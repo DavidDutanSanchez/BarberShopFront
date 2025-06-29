@@ -9,11 +9,12 @@ import {
 } from "../Controller/Persona";
 import PersonaTabla from "./personaTabla";
 import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid'
 
 const PersonaView = () => {
   const [personas, setPersonas] = useState<Persona[]>([]);
   const [formData, setFormData] = useState<Persona>({
-    idPersona: "",
+    idPersona: uuidv4(),
     cedulaPersona: "",
     nombresPersona: "",
     apellidosPersona: "",
@@ -27,7 +28,8 @@ const PersonaView = () => {
 
   const fetchData = async () => {
     try {
-      const data = await getAllPersonas();
+      const data = (await getAllPersonas({})).data;
+      console.log("Datos obtenidos:", data);
       setPersonas(data);
     } catch (err) {
       console.error("Error al obtener personas:", err);
@@ -35,14 +37,9 @@ const PersonaView = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getAllPersonas();
-      setPersonas(data);
-    };
-  
     fetchData();
   }, []);
-  
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,10 +49,10 @@ const PersonaView = () => {
   const handleSubmit = async () => {
     try {
       if (isEdit) {
-        await updatePersona(formData);
+        await updatePersona({payload:formData});
       } else {
-        const { idPersona, ...rest } = formData;
-        await addPersona(rest);
+        const resultado  = await addPersona({ payload: formData });
+        console.log("Resultado de agregar persona:", resultado);
       }
       handleClose();
       fetchData();
@@ -95,19 +92,19 @@ const PersonaView = () => {
 
   return (
     <Box p={4}>
-     
+
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-  <Typography variant="h4">Gestión de Personas</Typography>
-  <Button
-    variant="outlined"
-    component={Link}
-    to="/MainMenu"
-    color="secondary"
-  >
-    Volver al Menú
-  </Button>
-</Box>
-      
+        <Typography variant="h4">Gestión de Personas</Typography>
+        <Button
+          variant="outlined"
+          component={Link}
+          to="/MainMenu"
+          color="secondary"
+        >
+          Volver al Menú
+        </Button>
+      </Box>
+
       <Button variant="contained" onClick={() => setOpen(true)}>Agregar Persona</Button>
 
       <PersonaTabla personas={personas} onEdit={handleEdit} onDelete={handleDelete} />

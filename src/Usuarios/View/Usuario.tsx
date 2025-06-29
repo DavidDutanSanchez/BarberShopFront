@@ -14,12 +14,14 @@ import {
 import { getAllPersonas } from "../../Personas/Controller/Persona";
 import { Persona } from "../../Personas/Model/Persona";
 import { Link } from "react-router-dom";
-import UsuarioTabla from "./UsuarioTabla"; 
+import UsuarioTabla from "./UsuarioTabla";
+import { v4 as uuidv4 } from 'uuid'
 
 const UsuarioView = () => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [personas, setPersonas] = useState<Persona[]>([]);
-  const [formData, setFormData] = useState<Omit<Usuario, "idUsuarios">>({
+  const [formData, setFormData] = useState<Usuario>({
+    idUsuarios: uuidv4(),
     usuario: "",
     contraseniaUsuarios: "",
     permisosUsuarios: "",
@@ -33,8 +35,8 @@ const UsuarioView = () => {
   const fetchData = async () => {
     try {
       const [usuariosData, personasData] = await Promise.all([
-        getAllUsuarios(),
-        getAllPersonas(),
+        (await getAllUsuarios({})).data,
+        (await getAllPersonas({})).data,
       ]);
       setUsuarios(usuariosData);
       setPersonas(personasData);
@@ -61,10 +63,16 @@ const UsuarioView = () => {
 
   const handleSubmit = async () => {
     try {
+      const payload: Usuario = {
+        ...formData,
+        contraseniaUsuarios: btoa(formData.contraseniaUsuarios)
+      }
+
       if (editId) {
-        await updateUsuario({ ...formData, idUsuarios: editId });
+        await updateUsuario({ payload });
       } else {
-        await addUsuario(formData);
+        formData.idUsuarios = uuidv4();
+        await addUsuario({ payload });
       }
       handleClose();
       fetchData();
@@ -74,9 +82,9 @@ const UsuarioView = () => {
   };
 
   const handleEdit = (usuario: Usuario) => {
-    const { idUsuarios, ...rest } = usuario;
+    const { idUsuarios } = usuario;
     setEditId(idUsuarios);
-    setFormData(rest);
+    setFormData(usuario);
     setOpen(true);
   };
 
@@ -91,13 +99,14 @@ const UsuarioView = () => {
     setOpen(false);
     setEditId(null);
     setFormData({
+      idUsuarios: uuidv4(),
       usuario: "",
       contraseniaUsuarios: "",
       permisosUsuarios: "",
       _persona_id: "",
     });
   };
-
+  console.log(editId)
   return (
     <Box p={4}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -106,20 +115,20 @@ const UsuarioView = () => {
           Volver al Menú
         </Button>
       </Box>
-  
+
       {loading && <Typography>Cargando...</Typography>}
       {error && <Typography color="error">{error}</Typography>}
-  
+
       <Button variant="contained" onClick={() => setOpen(true)} sx={{ mb: 2 }}>
         Agregar Usuario
       </Button>
-  
+
       <UsuarioTabla
         usuarios={usuarios}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
-  
+
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{editId ? "Editar Usuario" : "Agregar Usuario"}</DialogTitle>
         <DialogContent>
@@ -152,7 +161,7 @@ const UsuarioView = () => {
               <MenuItem value="EMPLEADO">Empleado</MenuItem>
             </Select>
           </FormControl>
-  
+
           <FormControl fullWidth margin="normal">
             <InputLabel>Persona</InputLabel>
             <Select
@@ -176,5 +185,5 @@ const UsuarioView = () => {
       </Dialog>
     </Box>
   );
-}  
+}
 export default UsuarioView;

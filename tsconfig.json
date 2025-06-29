@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    /* Target modern browsers and allow modern syntax */
+    "target": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+
+    /* Keep type-checking strict */
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Module resolution and output settings */
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+
+    /* JSX in React 17+ style */
+    "jsx": "react-jsx",
+
+    /* Allow default imports from modules with no default export */
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": false,
+
+    /* Skip type-checking of declaration files (faster) */
+    "skipLibCheck": true,
+
+    /* Tell TS to include Vite’s client-side types so import.meta.env is known */
+    "types": ["vite/client"]
+  },
+
+  /* Only type-check files in src/ */
+  "include": ["src"]
+}
