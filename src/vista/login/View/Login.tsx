@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -6,19 +7,46 @@ import {
   Typography,
   Stack,
 } from "@mui/material";
+import { useState } from "react";
+import { loginUsuario } from "../Controller/UsuarioController";
+import { UsuarioLogin } from "../Model/Usuario";
+import React from "react";
+
 
 const Login = () => {
   const navigate = useNavigate();
+  const [usuario, setUsuario] = useState<string>("");
+  const [contrasenia, setContrasenia] = useState<string>("");
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    //navigate("/Login");
-    navigate("/MainMenu");
-  };
+ const handleLogin = async () => {
+  try {
+    const loginData = {
+      usuario,
+      contrasenia,
+    };
 
-  const handleCancel = () => {
-    navigate(-1);
-  };
+    const response = await loginUsuario(loginData);
+
+    console.log("🔍 Respuesta recibida del backend:", response);
+
+    if (response && response.success) {
+      localStorage.setItem("usuario", JSON.stringify(response));
+      navigate("/MainMenu");
+    } else {
+      alert("❌ Usuario o contraseña incorrectos.");
+    }
+  } catch (error) {
+    console.error("Error en login:", error);
+    alert("Error al intentar iniciar sesión. Intenta de nuevo.");
+  }
+};
+
+  
+const handleCancel = () => {
+  setUsuario("");        // Limpia el campo usuario
+  setContrasenia("");    // Limpia el campo contraseña
+  navigate("/PaginaInicial"); // Redirige a la ruta deseada
+};
 
   return (
     <Box
@@ -32,7 +60,11 @@ const Login = () => {
     >
       <Box
         component="form"
-        onSubmit={handleLogin}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleLogin();
+        }}
+        
         sx={{
           width: 380,
           p: 4,
@@ -57,11 +89,12 @@ const Login = () => {
         </Typography>
 
         <TextField
-          label="Correo"
-          type="email"
+          label="Usuario"
           fullWidth
           margin="normal"
           required
+          value={usuario}
+          onChange={(e) => setUsuario(e.target.value)}
         />
         <TextField
           label="Contraseña"
@@ -69,6 +102,8 @@ const Login = () => {
           fullWidth
           margin="normal"
           required
+          value={contrasenia}
+          onChange={(e) => setContrasenia(e.target.value)}
         />
 
         <Stack spacing={2} sx={{ mt: 2 }}>

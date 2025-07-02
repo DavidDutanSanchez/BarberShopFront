@@ -25,14 +25,17 @@ const UsuarioView = () => {
     usuario: "",
     contraseniaUsuarios: "",
     permisosUsuarios: "",
-    _persona_id: "",
+    _persona_id: ""
   });
   const [editId, setEditId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fetchData = async () => {
+
+  
+
     try {
       const [usuariosData, personasData] = await Promise.all([
         (await getAllUsuarios({})).data,
@@ -103,7 +106,7 @@ const UsuarioView = () => {
       usuario: "",
       contraseniaUsuarios: "",
       permisosUsuarios: "",
-      _persona_id: "",
+      _persona_id: ""
     });
   };
   console.log(editId)

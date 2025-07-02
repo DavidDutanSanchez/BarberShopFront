@@ -47,12 +47,12 @@ const PaginaInicial: React.FC = () => {
       'YZcnjruOTI79ompqD'
     )
       .then(() => {
-        alert('Mensaje enviado correctamente ✅');
+        alert('Mensaje enviado correctamente');
         form.current?.reset();
       })
       .catch((error) => {
         console.error('Error:', error);
-        alert('Error al enviar el mensaje ❌');
+        alert('Error al enviar el mensaje');
       });
   };
 

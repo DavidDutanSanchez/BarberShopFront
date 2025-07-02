@@ -10,6 +10,7 @@ export interface RequestParams<T = unknown>
   requiresToken?: boolean
   customToken?: string | undefined | null
   payload?: T
+  body?: T; 
   responseType?: ResponseType
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setError?: UseFormSetError<any>

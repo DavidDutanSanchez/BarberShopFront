@@ -1,4 +1,3 @@
-// src/components/Layout.jsx
 import { useEffect, Suspense } from "react";
 import { Outlet, NavLink } from "react-router-dom";
 import {
@@ -18,8 +17,8 @@ import Logout from "@mui/icons-material/Logout"
 import ContentCut from "@mui/icons-material/ContentCut"
 import Inventory from "@mui/icons-material/Inventory"
 import Web from "@mui/icons-material/Web";
-
-
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
 //este path es para cargar la pagina prinicpal
 //const Settings = lazy(() => import("../pages/Settings"));
@@ -32,12 +31,12 @@ export default function Layout() {
 
   const menuItems = [
     { label: "Registro de Personas", to: "/Empleados", icon: <Person /> },
-    { label: "Gestion Usuarios", to: "/Usuarios", icon: <Person /> },
+    { label: "Gestion Usuarios", to: "/Usuarios", icon: <ManageAccountsIcon  /> },
+    { label: "Archivos", to: "/Archivos", icon: <InsertDriveFileIcon  /> },
     { label: "Reportes", to: "/Reportes", icon: <BarChart /> },
     { label: "Cortes", to: "/Ticket", icon: <ContentCut /> },
     { label: "Productos", to: "/Productos", icon: <Inventory /> },
-    { label: "Pagina", to: "/Pagina", icon: <Web /> },
-    { label: "Configuracion", to: "/Configuracion", icon: <Settings /> },
+    { label: "Pagina", to: "/Pagina", icon: <Web /> },   
     { label: "Salir", to: "/Login", icon: <Logout /> },
 
   ];
