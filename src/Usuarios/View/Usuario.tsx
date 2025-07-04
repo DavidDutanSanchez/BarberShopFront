@@ -109,7 +109,6 @@ const UsuarioView = () => {
       _persona_id: ""
     });
   };
-  console.log(editId)
   return (
     <Box p={4}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>

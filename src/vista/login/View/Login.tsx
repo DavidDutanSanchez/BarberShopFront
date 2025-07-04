@@ -27,7 +27,6 @@ const Login = () => {
 
     const response = await loginUsuario(loginData);
 
-    console.log("🔍 Respuesta recibida del backend:", response);
 
     if (response && response.success) {
       localStorage.setItem("usuario", JSON.stringify(response));

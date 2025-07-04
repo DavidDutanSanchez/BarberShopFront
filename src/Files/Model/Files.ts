@@ -1,4 +1,4 @@
-export interface File {
+export interface Files {
     idFiles: string;
     extencionFiles: string;
     tamanioFiles: number;

@@ -29,7 +29,6 @@ const PersonaView = () => {
   const fetchData = async () => {
     try {
       const data = (await getAllPersonas({})).data;
-      console.log("Datos obtenidos:", data);
       setPersonas(data);
     } catch (err) {
       console.error("Error al obtener personas:", err);
@@ -52,7 +51,6 @@ const PersonaView = () => {
         await updatePersona({payload:formData});
       } else {
         const resultado  = await addPersona({ payload: formData });
-        console.log("Resultado de agregar persona:", resultado);
       }
       handleClose();
       fetchData();

@@ -4,7 +4,7 @@ import {
     DialogContent, DialogActions, FormControl,
     InputLabel, Select, MenuItem
 } from "@mui/material";
-import { File } from "../Model/Files";
+import { Files } from "../Model/Files";
 import { Persona } from "../../Personas/Model/Persona";
 import { v4 as uuidv4 } from "uuid";
 import { getAllFiles, addFile, updateFile, deleteFile } from "../Controller/Files";
@@ -19,9 +19,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 
 const FileView = () => {
-    const [files, setFiles] = useState<File[]>([]);
+    const [files, setFiles] = useState<Files[]>([]);
     const [personas, setPersonas] = useState<Persona[]>([]);
-    const [formData, setFormData] = useState<File>({
+    const [formData, setFormData] = useState<Files>({
         idFiles: uuidv4(),
         nombreArchivoFiles: "",
         tamanioFiles: 0,
@@ -33,7 +33,7 @@ const FileView = () => {
     const [open, setOpen] = useState(false);
 
     const fetchData = async () => {
-        const data = await getAllFiles({} as GlobalQueryParams<File>);
+        const data = await getAllFiles({} as GlobalQueryParams<Files>);
         const pData = await getAllPersonas({} as GlobalQueryParams<Persona>).then(res => res.data);
         setFiles(data.data);
         setPersonas(pData);
@@ -77,7 +77,7 @@ const FileView = () => {
         fetchData();
     };
 
-    const handleEdit = (file: File) => {
+    const handleEdit = (file: Files) => {
         setEditId(file.idFiles);
         setFormData(file);
         setOpen(true);

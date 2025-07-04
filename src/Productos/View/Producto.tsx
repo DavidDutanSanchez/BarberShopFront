@@ -69,7 +69,6 @@ const ProductoView = () => {
 
         await updateProducto({ payload: formData });
       } else {
-        console.log("Agregando producto:", formData);
         await addProducto({ payload: formData });
       }
 

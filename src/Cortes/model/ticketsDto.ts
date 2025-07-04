@@ -1,17 +1,23 @@
+import { Producto } from "../../Productos/Model/Producto"
+import { ServicioDto } from "../../Servicios/Model/Servicio"
+
 export interface ticketsCabeceraDto {
-  IdTickets: string
-  FechaTicket: Date
-  EstadoTicketCab: Number
-  TotalTicketCab: Number
+  idTickets: string
+  fechaTicket: Date
+  estadoTicketCab: boolean
+  totalTicketCab: number
   _usuario_id: string
   detalle_tickets?: ticketsDetalleDto[]
 }
 
 export interface ticketsDetalleDto {
-  IdTicketsDetalle: string
-  SubTotalTicketDet: Number
-  FechaTicketDet: Date
+  idTicketsDetalle: string
+  subTotalTicketDet: number
+  fechaTicketDet: Date
+  cantidadTicketDet: number
   _ticket_cabecera: string
-  _servicio_id: string
-  _producto_id: string
+  _servicio_id?: string
+  _producto_id?: string
+  servicios?: ServicioDto
+  prodcutos?: Producto
 }
