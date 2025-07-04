@@ -1,5 +1,17 @@
+# app_location: "/"
+# output_location: "dist"
+
+# build_environment_variables:
+#   NODE_VERSION: "20.12.2"
+
+
 app_location: "/"
 output_location: "dist"
+
+routes:
+  - route: "/*"
+    serve: "/index.html"
+    statusCode: 200
 
 build_environment_variables:
   NODE_VERSION: "20.12.2"
