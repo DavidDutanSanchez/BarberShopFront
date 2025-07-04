@@ -43,9 +43,9 @@ const Login = () => {
 
   
 const handleCancel = () => {
-  setUsuario("");        // Limpia el campo usuario
-  setContrasenia("");    // Limpia el campo contraseña
-  navigate("/PaginaInicial"); // Redirige a la ruta deseada
+  setUsuario("");        
+  setContrasenia("");    
+  navigate("/"); 
 };
 
   return (
