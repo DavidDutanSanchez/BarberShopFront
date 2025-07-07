@@ -7,6 +7,7 @@ import ProductoView from "../Productos/View/Producto";
 import UsuarioView from "../Usuarios/View/Usuario";
 import TicketView from "../Cortes/view/TicketView";
 import Archivos from "../Files/View/Files";
+import ReporteTicketView from "../Reportes/View/ReporteTicketView";
 
 const AppRouter = () => {
     return (
@@ -21,6 +22,7 @@ const AppRouter = () => {
                 <Route path="/Usuarios" element={<UsuarioView />} />
                 <Route path="/Ticket" element={<TicketView />} />
                 <Route path="/Archivos" element={<Archivos />} />
+                 <Route path="/ReporteTicketView" element={<ReporteTicketView />} />
                 {/* <Route path="*" element={<NotFound />} /> */}
             </Routes>
         </Router>

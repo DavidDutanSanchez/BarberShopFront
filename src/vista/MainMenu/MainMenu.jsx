@@ -32,7 +32,7 @@ export default function Layout() {
     { label: "Registro de Personas", to: "/Empleados", icon: <Person /> },
     { label: "Gestion Usuarios", to: "/Usuarios", icon: <ManageAccountsIcon /> },
     { label: "Archivos", to: "/Archivos", icon: <InsertDriveFileIcon /> },
-    { label: "Reportes", to: "/Reportes", icon: <BarChart /> },
+    { label: "Reportes", to: "/ReporteTicketView", icon: <BarChart /> },
     { label: "Cortes", to: "/Ticket", icon: <ContentCut /> },
     { label: "Productos", to: "/Productos", icon: <Inventory /> },
     { label: "Pagina", to: "/Pagina", icon: <Web /> },
