@@ -22,7 +22,7 @@ class HttpClient implements IHttpClient {
     return this.request('POST', parameters)
   }
   postAsFormData<T extends object, R>(parameters: IHttpClientRequestParams<T>): Promise<R> {
-    const { payload, ...restParams } = parameters
+    const { payload, body, ...restParams } = parameters
     const formData = toFormData(payload!, undefined, { indexes: null })
     const newParams: IHttpClientRequestParams<GenericFormData> = {
       ...restParams,

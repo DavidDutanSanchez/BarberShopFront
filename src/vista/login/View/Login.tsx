@@ -30,7 +30,7 @@ const Login = () => {
 
     if (response && response.success) {
       localStorage.setItem("usuario", JSON.stringify(response));
-      navigate("/MainMenu");
+      navigate("/Ticket");
     } else {
       alert("❌ Usuario o contraseña incorrectos.");
     }
