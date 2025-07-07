@@ -20,6 +20,7 @@ const SideBarMenu = () => {
     { name: "Cortes", route: "/Ticket", icon: <ContentCut /> },
     { name: "Archivos", route: "/Archivos", icon: <InsertDriveFileIcon /> },
     { name: "Reportes", route: "/ReporteTicketView", icon: <BarChart /> },
+    { name: "Salir", route: "/Login", icon: <Logout /> },
   ]
 
   return (
