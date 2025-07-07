@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getReporteTickets } from "../Controller/ReporteTicketController";
 import { ReporteTicket } from "../Modelo/ReporteTicket";
 
@@ -6,27 +6,17 @@ const ReporteTicketView = () => {
   const [datos, setDatos] = useState<ReporteTicket[]>([]);
 
 
- const cargar = async () => {
-      try {
-        const datos = (await getReporteTickets({page:1,pageSize:100}));
-        console.log("Datos cargados:", datos);
-       // setDatos(datos);
-      } catch (error) {
-        console.error(" Error cargando tickets:", error);
-      }
-    };
+  const cargar = async () => {
+    try {
+      const datos = (await getReporteTickets({ page: 1, pageSize: 100 })).data;
+      setDatos(datos);
+    } catch (error) {
+      console.error(" Error cargando tickets:", error);
+    }
+  };
 
   useEffect(() => {
-    // const cargar = async () => {
-    //   try {
-    //     const datos = (await getReporteTickets({page:1,pageSize:100})).data;
-    //     console.log("Datos cargados:", datos);
-    //    // setDatos(datos);
-    //   } catch (error) {
-    //     console.error(" Error cargando tickets:", error);
-    //   }
-    // };
-     cargar();
+    cargar();
   }, []);
 
   return (

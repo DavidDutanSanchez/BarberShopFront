@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Usuario } from "../../Usuarios/Model/Usuario";
 import { getAllUsuarios } from "../../Usuarios/Controller/Usuario";
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -27,7 +26,6 @@ const TicketView = () => {
   const [imagenes, setImagenes] = useState<Files[]>([]);
   const [mostrarGestion, setMostrarGestion] = useState(false);
   const [usuariosVisibles, setUsuariosVisibles] = useState<string[]>([]);
-  const navigate = useNavigate();
 
   const getAllEmpleados = async () => {
     try {
