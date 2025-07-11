@@ -18,29 +18,6 @@ const Login = () => {
   const [usuario, setUsuario] = useState<string>("");
   const [contrasenia, setContrasenia] = useState<string>("");
 
-  // const handleLogin = async () => {
-  //   try {
-  //     const loginData = {
-  //       usuario,
-  //       contrasenia,
-  //     };
-
-  //     const response = await loginUsuario(loginData);
-
-
-  //     if (response && response.success) {
-  //       localStorage.setItem("usuario", JSON.stringify(response));
-  //       console.log("Login exitoso:", response);
-  //       navigate("/Ticket");
-  //     } else {
-  //       alert("❌ Usuario o contraseña incorrectos.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error en login:", error);
-  //     alert("Error al intentar iniciar sesión. Intenta de nuevo.");
-  //   }
-  // };
-
   const handleLogin = async () => {
     try {
       const loginData = {
@@ -49,31 +26,54 @@ const Login = () => {
       };
 
       const response = await loginUsuario(loginData);
-      console.log("Respuesta completa del login:", response);
 
-      if (response && response.success && response.result) {
-        const userData = response.result;
 
-        localStorage.setItem("usuario", userData.usuario);
-        localStorage.setItem("rol", userData.permisos);
-        localStorage.setItem("idUsuario", userData.id);
-
-        if (userData.permisos.toUpperCase() === "ADMINISTRADOR") {
-          navigate("/MainMenu");
-        } else if (userData.permisos.toUpperCase() === "BARBERO") {
-          navigate("/Ticket");
-        } else {
-          alert("Rol no reconocido.");
-        }
+      if (response && response.success) {
+        localStorage.setItem("usuario", JSON.stringify(response));
+        console.log("Login exitoso:", response);
+        navigate("/Ticket");
       } else {
-        alert("Usuario o contraseña incorrectos.");
+        alert("❌ Usuario o contraseña incorrectos.");
       }
-
     } catch (error) {
       console.error("Error en login:", error);
       alert("Error al intentar iniciar sesión. Intenta de nuevo.");
     }
   };
+
+  // const handleLogin = async () => {
+  //   try {
+  //     const loginData = {
+  //       usuario,
+  //       contrasenia,
+  //     };
+
+  //     const response = await loginUsuario(loginData);
+  //     console.log("Respuesta completa del login:", response);
+
+  //     if (response && response.success && response.result) {
+  //       const userData = response.result;
+
+  //       localStorage.setItem("usuario", userData.usuario);
+  //       localStorage.setItem("rol", userData.permisos);
+  //       localStorage.setItem("idUsuario", userData.id);
+
+  //       if (userData.permisos.toUpperCase() === "ADMINISTRADOR") {
+  //         navigate("/Ticket");
+  //       } else if (userData.permisos.toUpperCase() === "BARBERO") {
+  //         navigate("/Ticket");
+  //       } else {
+  //         alert("Rol no reconocido.");
+  //       }
+  //     } else {
+  //       alert("Usuario o contraseña incorrectos.");
+  //     }
+
+  //   } catch (error) {
+  //     console.error("Error en login:", error);
+  //     alert("Error al intentar iniciar sesión. Intenta de nuevo.");
+  //   }
+  // };
 
 
 
