@@ -160,7 +160,7 @@ const UsuarioView = () => {
               label="Permisos"
             >
               <MenuItem value="ADMINISTRADOR">Administrador</MenuItem>
-              <MenuItem value="EMPLEADO">Empleado</MenuItem>
+              <MenuItem value="BARBERO">Barbero</MenuItem>
             </Select>
           </FormControl>
 

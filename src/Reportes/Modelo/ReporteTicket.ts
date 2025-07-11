@@ -6,5 +6,6 @@ export interface ReporteTicket {
   cantidad: number;
   subtotal: number;
   total: number;
+  totalServicios: number;
+  totalVecesServicio: number;
 }
-
