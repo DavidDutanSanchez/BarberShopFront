@@ -10,7 +10,8 @@ import { IHttpClient, IHttpClientRequestParams } from './types'
 import { DefaultResponseDto, ValidationResultDto } from '../../Dtos/DefaultResponseDto'
 import { UseFormSetError } from 'react-hook-form'
 
-axios.defaults.baseURL = '/api'
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL || '/api'
+//axios.defaults.baseURL = '/api'
 axios.defaults.timeout = 30000
 
 class HttpClient implements IHttpClient {
