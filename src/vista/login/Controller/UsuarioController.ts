@@ -1,13 +1,13 @@
 import { httpClient } from "../../../services/HttpClient/HttpClient";
-import { IHttpClientRequestParams } from "../../../services/HttpClient/types";
-import { ApiResponse, UsuarioLogin, UsuarioResponse } from "../Model/Usuario";
+import { IHttpClientRequestParams, RequestParams } from "../../../services/HttpClient/types";
+import { Usuario } from "../../../Usuarios/Model/Usuario";
+import { UsuarioLogin } from "../Model/Usuario";
 
-export const loginUsuario = async (loginData: UsuarioLogin) => {
+export const loginUsuario = async (params: RequestParams<UsuarioLogin>) => {
   const parameters: IHttpClientRequestParams<UsuarioLogin> = {
     url: "/Usuario/Login",
-    payload: loginData,
-    requiresToken: false,
+    ...params,
   };
 
-  return httpClient.post<UsuarioLogin, ApiResponse<UsuarioResponse>>(parameters);
+  return httpClient.post<UsuarioLogin, Usuario>(parameters);
 };

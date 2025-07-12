@@ -11,6 +11,7 @@ import { useState } from "react";
 import { loginUsuario } from "../Controller/UsuarioController";
 import { UsuarioLogin } from "../Model/Usuario";
 import React from "react";
+import { DefaultResponseDto } from "../../../Dtos/DefaultResponseDto";
 
 
 const Login = () => {
@@ -20,60 +21,29 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const loginData = {
+      const payload = {
         usuario,
         contrasenia,
       };
 
-      const response = await loginUsuario(loginData);
+      const response = await loginUsuario({ payload });
 
+        localStorage.setItem("usuario", response.usuario);
+        localStorage.setItem("rol", response.permisosUsuarios);
+        localStorage.setItem("idUsuario", response.idUsuarios);
 
-      if (response && response.success) {
-        localStorage.setItem("usuario", JSON.stringify(response));
-        console.log("Login exitoso:", response);
-        navigate("/Ticket");
-      } else {
-        alert("❌ Usuario o contraseña incorrectos.");
-      }
+        if (response.permisosUsuarios.toUpperCase() === "ADMINISTRADOR") {
+          navigate("/Ticket");
+        } else if (response.permisosUsuarios.toUpperCase() === "BARBERO") {
+          navigate("/Ticket");
+        } else {
+          alert("Rol no reconocido.");
+        }
+
     } catch (error) {
-      console.error("Error en login:", error);
-      alert("Error al intentar iniciar sesión. Intenta de nuevo.");
+      alert(`Error: ${(error as DefaultResponseDto<null>).message }`);
     }
   };
-
-  // const handleLogin = async () => {
-  //   try {
-  //     const loginData = {
-  //       usuario,
-  //       contrasenia,
-  //     };
-
-  //     const response = await loginUsuario(loginData);
-  //     console.log("Respuesta completa del login:", response);
-
-  //     if (response && response.success && response.result) {
-  //       const userData = response.result;
-
-  //       localStorage.setItem("usuario", userData.usuario);
-  //       localStorage.setItem("rol", userData.permisos);
-  //       localStorage.setItem("idUsuario", userData.id);
-
-  //       if (userData.permisos.toUpperCase() === "ADMINISTRADOR") {
-  //         navigate("/Ticket");
-  //       } else if (userData.permisos.toUpperCase() === "BARBERO") {
-  //         navigate("/Ticket");
-  //       } else {
-  //         alert("Rol no reconocido.");
-  //       }
-  //     } else {
-  //       alert("Usuario o contraseña incorrectos.");
-  //     }
-
-  //   } catch (error) {
-  //     console.error("Error en login:", error);
-  //     alert("Error al intentar iniciar sesión. Intenta de nuevo.");
-  //   }
-  // };
 
 
 
