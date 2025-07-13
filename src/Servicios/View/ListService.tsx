@@ -86,22 +86,40 @@ const ServiciosModal = ({ open, onClose, onAdd }: ServiciosModalProps) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {servicios.map(row => (
-                  <TableRow key={row.idServicio}>
-                    <TableCell>{row.nombreServicio}</TableCell>
-                    <TableCell>{row.costoServicio}</TableCell>
-                    <TableCell>{row.comisionServicio}</TableCell>
-                    <TableCell>
-                      <IconButton onClick={() => { onAdd(row) }}>
-                        <Add />
-                      </IconButton>
-                      <IconButton onClick={() => deleteServicio(row.idServicio)}>
-                        <Delete />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+  {servicios.map(row => (
+    <TableRow
+      key={row.idServicio}
+      onClick={() => onAdd(row)}
+      sx={{
+        cursor: 'pointer',
+        transition: 'background-color 0.2s ease-in-out',
+        '&:hover': {
+          backgroundColor: '#f0f0f0' // tono más oscuro al pasar el mouse
+        },
+        '&:active': {
+          backgroundColor: '#e0e0e0' // tono más oscuro al hacer clic
+        }
+      }}
+    >
+      <TableCell>{row.nombreServicio}</TableCell>
+      <TableCell>{row.costoServicio}</TableCell>
+      <TableCell>{row.comisionServicio}</TableCell>
+      <TableCell onClick={e => e.stopPropagation()}>
+        <IconButton onClick={() => onAdd(row)}>
+          <Add />
+        </IconButton>
+        <IconButton onClick={(e) => {
+          e.stopPropagation();
+          deleteServicio(row.idServicio);
+        }}>
+          <Delete />
+        </IconButton>
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
+
+
             </Table>
           </TableContainer>
         </DialogContent>
