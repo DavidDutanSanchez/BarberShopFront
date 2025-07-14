@@ -51,7 +51,7 @@ class HttpClient implements IHttpClient {
         customToken,
         responseType,
         cancelToken,
-        withCredentials = true,
+        withCredentials = false,
         headers,
         setError,
       } = parameters
