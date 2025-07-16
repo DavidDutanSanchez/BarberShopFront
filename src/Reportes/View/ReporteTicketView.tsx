@@ -128,8 +128,11 @@ useEffect(() => {
           veces: 0,
         };
       }
-      acc[item.servicio].total += item.subtotal;
-      acc[item.servicio].veces += 1; // ✅ contar repeticiones reales del filtro
+    // acc[item.servicio].total += item.CostoServicio * item.cantidad;
+    acc[item.servicio].total += item.costoUnitarioServicio * item.cantidad;
+
+acc[item.servicio].veces += item.cantidad;
+
       return acc;
     }, {} as Record<string, { servicio: string; total: number; veces: number }>)
   );

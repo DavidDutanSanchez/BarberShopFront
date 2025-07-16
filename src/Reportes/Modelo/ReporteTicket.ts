@@ -8,4 +8,6 @@ export interface ReporteTicket {
   total: number;
   totalServicios: number;
   totalVecesServicio: number;
+  CostoServicio: number;
+  costoUnitarioServicio: number;
 }
