@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar'
 import { Link } from 'react-router-dom'
 import Person from "@mui/icons-material/Person";
@@ -6,7 +6,6 @@ import BarChart from "@mui/icons-material/BarChart";
 import Logout from "@mui/icons-material/Logout";
 import ContentCut from "@mui/icons-material/ContentCut";
 import Inventory from "@mui/icons-material/Inventory";
-import Web from "@mui/icons-material/Web";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
@@ -14,14 +13,22 @@ const SideBarMenu = () => {
   const [collapsed, setCollapsed] = useState(true)
 
   const extraRoutes = [
-    { name: "Registro de Personas", route: "/Empleados", icon: <Person /> },
-    { name: "Productos", route: "/Productos", icon: <Inventory /> },
-    { name: "Gestion Usuarios", route: "/Usuarios", icon: <ManageAccountsIcon /> },
-    { name: "Cortes", route: "/Ticket", icon: <ContentCut /> },
-    { name: "Archivos", route: "/Archivos", icon: <InsertDriveFileIcon /> },
-    { name: "Reportes", route: "/ReporteTicketView", icon: <BarChart /> },
-    { name: "Salir", route: "/Login", icon: <Logout /> },
+    { name: "Registro de Personas", route: "/Empleados", icon: <Person />, roles: ["ADMINISTRADOR"] },
+    { name: "Productos", route: "/Productos", icon: <Inventory />, roles: ["ADMINISTRADOR"] },
+    { name: "Gestion Usuarios", route: "/Usuarios", icon: <ManageAccountsIcon />, roles: ["ADMINISTRADOR"] },
+    { name: "Cortes", route: "/Ticket", icon: <ContentCut />, roles: ["ADMINISTRADOR", "BARBERO"] },
+    { name: "Archivos", route: "/Archivos", icon: <InsertDriveFileIcon />, roles: ["ADMINISTRADOR"] },
+    { name: "Reportes", route: "/ReporteTicketView", icon: <BarChart />, roles: ["ADMINISTRADOR"] },
+    { name: "Salir", route: "/Login", icon: <Logout />, roles: ["ADMINISTRADOR", "BARBERO"] },
   ]
+
+  const role = useMemo(() => {
+    return (localStorage.getItem("rol") || "").toUpperCase();
+  }, []);
+
+  const routes = useMemo(() => {
+    return extraRoutes.filter(r => r.roles.includes(role));
+  }, [role]);
 
   return (
     <div style={{ height: '100%' }}>
@@ -34,7 +41,7 @@ const SideBarMenu = () => {
       >
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100vh' }}>
           <Menu>
-            {extraRoutes.map((route) => (
+            {routes.map((route) => (
               <MenuItem
                 key={route.name}
                 component={<Link to={route.route} />}
