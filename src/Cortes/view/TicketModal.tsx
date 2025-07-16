@@ -7,12 +7,18 @@ import ServiciosModal from '../../Servicios/View/ListService'
 import { ServicioDto } from '../../Servicios/Model/Servicio'
 import { v4 as uuidv4 } from "uuid";
 import { addTicket } from '../controller/serviceTickets'
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
 type TicketModalProps = {
   open: boolean
   onClose: () => void
   usuarioSelecionado: Usuario
 }
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const TicketModal = ({ open,
   onClose, usuarioSelecionado }: TicketModalProps) => {
@@ -48,7 +54,8 @@ const TicketModal = ({ open,
             idTicketsDetalle: uuidv4(),
             _servicio_id: servicio.idServicio,
             _ticket_cabecera: '',
-            fechaTicketDet: new Date(),
+            // fechaTicketDet: new Date(),
+            fechaTicketDet: dayjs().tz("America/Guayaquil").toDate(),
             cantidadTicketDet: 1,
             subTotalTicketDet: servicio.costoServicio,
             servicios: servicio,
@@ -76,7 +83,8 @@ const TicketModal = ({ open,
 
         const payload: ticketsCabeceraDto = {
           idTickets: idnuevo,
-          fechaTicket: new Date(),
+          //fechaTicket: new Date(),
+          fechaTicket: dayjs().tz("America/Guayaquil").toDate(), 
           estadoTicketCab: true,
           totalTicketCab: detalleConCabecera.reduce(
             (sum, line) => sum + line.subTotalTicketDet,

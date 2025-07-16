@@ -15,6 +15,8 @@ import {
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
+
+
 const ReporteTicketView = () => {
   const [datos, setDatos] = useState<ReporteTicket[]>([]);
   const [usuario, setUsuario] = useState("");
@@ -24,36 +26,66 @@ const ReporteTicketView = () => {
   const [filtroFechaTipo, setFiltroFechaTipo] = useState<"DIA" | "SEMANA" | "MES" | "NINGUNO">("NINGUNO");
 
   const cargar = async () => {
-    try {
-      const response = await getReporteTickets({ page: 1, pageSize: 1000 });
-      setDatos(response.data);
-    } catch (error) {
-      console.error("❌ Error cargando tickets:", error);
-    }
-  };
+  try {
+    const filtros: any = {
+      page: 1,
+      pageSize: 1000
+    };
 
-  useEffect(() => {
-    cargar();
-  }, []);
+    if (fechaInicio) filtros.fechaInicio = fechaInicio;
+    if (fechaFin) filtros.fechaFin = fechaFin;
 
-  useEffect(() => {
-    const hoy = dayjs();
-    if (filtroFechaTipo === "DIA") {
-      const hoyStr = hoy.format("YYYY-MM-DD");
-      setFechaInicio(hoyStr);
-      setFechaFin(hoyStr);
-    } else if (filtroFechaTipo === "SEMANA") {
-      const inicio = hoy.startOf("week").format("YYYY-MM-DD");
-      const fin = hoy.endOf("week").format("YYYY-MM-DD");
-      setFechaInicio(inicio);
-      setFechaFin(fin);
-    } else if (filtroFechaTipo === "MES") {
-      const inicio = hoy.startOf("month").format("YYYY-MM-DD");
-      const fin = hoy.endOf("month").format("YYYY-MM-DD");
-      setFechaInicio(inicio);
-      setFechaFin(fin);
-    }
-  }, [filtroFechaTipo]);
+    const response = await getReporteTickets(filtros);
+    setDatos(response.data);
+  } catch (error) {
+    console.error("❌ Error cargando tickets:", error);
+  }
+};
+
+
+useEffect(() => {
+  const hoy = dayjs();
+  if (filtroFechaTipo === "DIA") {
+    const hoyStr = hoy.format("YYYY-MM-DD");
+    setFechaInicio(hoyStr);
+    setFechaFin(hoyStr);
+  } else if (filtroFechaTipo === "SEMANA") {
+    const inicio = hoy.startOf("week").format("YYYY-MM-DD");
+    const fin = hoy.endOf("week").format("YYYY-MM-DD");
+    setFechaInicio(inicio);
+    setFechaFin(fin);
+  } else if (filtroFechaTipo === "MES") {
+    const inicio = hoy.startOf("month").format("YYYY-MM-DD");
+    const fin = hoy.endOf("month").format("YYYY-MM-DD");
+    setFechaInicio(inicio);
+    setFechaFin(fin);
+  } else {
+    // 👇 Aquí fuerza que no se aplique ningún filtro de fecha
+    setFechaInicio("");
+    setFechaFin("");
+  }
+}, [filtroFechaTipo]);
+
+
+
+//   useEffect(() => {
+//     const hoy = dayjs();
+//     if (filtroFechaTipo === "DIA") {
+//       const hoyStr = hoy.format("YYYY-MM-DD");
+//       setFechaInicio(hoyStr);
+//       setFechaFin(hoyStr);
+//     } else if (filtroFechaTipo === "SEMANA") {
+//       const inicio = hoy.startOf("week").format("YYYY-MM-DD");
+//       const fin = hoy.endOf("week").format("YYYY-MM-DD");
+//       setFechaInicio(inicio);
+//       setFechaFin(fin);
+//     } else if (filtroFechaTipo === "MES") {
+//       const inicio = hoy.startOf("month").format("YYYY-MM-DD");
+//       const fin = hoy.endOf("month").format("YYYY-MM-DD");
+//       setFechaInicio(inicio);
+//       setFechaFin(fin);
+//     }
+//   }, [filtroFechaTipo]);
 
   const datosFiltrados = datos.filter((item) => {
     const fecha = dayjs(item.fechaTicket);
@@ -102,13 +134,16 @@ const ReporteTicketView = () => {
     }, {} as Record<string, { servicio: string; total: number; veces: number }>)
   );
 
-  const exportarPDF = () => {
-    const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text("Reporte de Tickets", 14, 20);
+ const exportarPDF = () => {
+  const doc = new jsPDF();
+  doc.setFontSize(16);
+  doc.text("Reporte de Tickets", 14, 20);
 
-    const columnas = ["Fecha", "Usuario", "Servicio", "Subtotal", "Total"];
-    const filas = datosFiltrados.map((item) => [
+  // 🔽 Tabla de tickets detallados
+  const columnas = ["Fecha", "Usuario", "Servicio", "Subtotal", "Total"];
+  const filas = datosFiltrados
+    .sort((a, b) => a.usuario.localeCompare(b.usuario)) // Ordenar por usuario
+    .map((item) => [
       dayjs(item.fechaTicket).format("YYYY-MM-DD HH:mm"),
       item.usuario,
       item.servicio,
@@ -116,14 +151,54 @@ const ReporteTicketView = () => {
       `$${item.total.toFixed(2)}`
     ]);
 
-    autoTable(doc, {
-      head: [columnas],
-      body: filas,
-      startY: 30,
-    });
+  autoTable(doc, {
+    head: [columnas],
+    body: filas,
+    startY: 30,
+  });
 
-    doc.save("reporte_tickets.pdf");
-  };
+  // 🧠 Agrupar por usuario usando tickets únicos
+  const ticketsUnicos = new Map<string, { usuario: string; total: number }>();
+  datosFiltrados.forEach((item) => {
+    const clave = `${item.usuario}-${item.fechaTicket}`;
+    if (!ticketsUnicos.has(clave)) {
+      ticketsUnicos.set(clave, { usuario: item.usuario, total: item.total });
+    }
+  });
+
+  const resumenPorUsuario = Array.from(ticketsUnicos.values()).reduce((acc, item) => {
+    if (!acc[item.usuario]) {
+      acc[item.usuario] = { usuario: item.usuario, total: 0 };
+    }
+    acc[item.usuario].total += item.total;
+    return acc;
+  }, {} as Record<string, { usuario: string; total: number }>);
+
+  const resumenArray = Object.values(resumenPorUsuario).map((item) => ({
+    usuario: item.usuario,
+    total: item.total,
+    comision: item.total * 0.5
+  }));
+
+  // 📌 Añadir tabla de resumen por usuario debajo de la anterior
+  autoTable(doc, {
+    startY: (doc as any).lastAutoTable.finalY + 10,
+    head: [["Usuario", "Total", "Comisión (50%)"]],
+    body: resumenArray.map(r => [
+      r.usuario,
+      `$${r.total.toFixed(2)}`,
+      `$${r.comision.toFixed(2)}`
+    ])
+  });
+
+  doc.save("reporte_tickets.pdf");
+};
+
+
+  useEffect(() => {
+  cargar();
+}, [fechaInicio, fechaFin]);
+
 
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>

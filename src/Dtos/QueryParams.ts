@@ -4,4 +4,6 @@ export type GlobalQueryParams<T> = {
   pageSize?: number
   isOrderByDescending?: boolean
   orderBy?: keyof T
+  fechaInicio?: string;
+  fechaFin?: string;
 }
