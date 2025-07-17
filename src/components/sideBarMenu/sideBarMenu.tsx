@@ -19,6 +19,7 @@ const SideBarMenu = () => {
     { name: "Cortes", route: "/Ticket", icon: <ContentCut />, roles: ["ADMINISTRADOR", "BARBERO"] },
     { name: "Archivos", route: "/Archivos", icon: <InsertDriveFileIcon />, roles: ["ADMINISTRADOR"] },
     { name: "Reportes", route: "/ReporteTicketView", icon: <BarChart />, roles: ["ADMINISTRADOR"] },
+    { name: "Reporte-Bar", route: "/ReporteTicketViewBar", icon: <BarChart />, roles: ["BARBERO"] },
     { name: "Salir", route: "/Login", icon: <Logout />, roles: ["ADMINISTRADOR", "BARBERO"] },
   ]
 

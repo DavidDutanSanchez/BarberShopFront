@@ -8,6 +8,7 @@ import UsuarioView from "../Usuarios/View/Usuario";
 import TicketView from "../Cortes/view/TicketView";
 import Archivos from "../Files/View/Files";
 import ReporteTicketView from "../Reportes/View/ReporteTicketView";
+import ReporteTicketViewBar from "../Reportes/View/ReporteTicketViewBar";
 import Layout from "../components/layouts/Layout";
 
 const AppRouter = () => {
@@ -24,6 +25,7 @@ const AppRouter = () => {
                     <Route path="/Ticket" element={<TicketView />} />
                     <Route path="/Archivos" element={<Archivos />} />
                     <Route path="/ReporteTicketView" element={<ReporteTicketView />} />
+                    <Route path="/ReporteTicketViewBar" element={<ReporteTicketViewBar />} />
                 </Route>
             </Routes>
         </Router>
