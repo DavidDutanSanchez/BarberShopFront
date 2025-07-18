@@ -100,42 +100,43 @@ useEffect(() => {
     );
   });
 
-  const ticketsUnicos = new Map<string, { usuario: string; total: number }>();
-  datosFiltrados.forEach((item) => {
-    const clave = `${item.usuario}-${item.fechaTicket}`;
-    if (!ticketsUnicos.has(clave)) {
-      ticketsUnicos.set(clave, { usuario: item.usuario, total: item.total });
-    }
-  });
+  // const ticketsUnicos = new Map<string, { usuario: string; total: number }>();
+  // datosFiltrados.forEach((item) => {
+  //   const clave = `${item.usuario}-${item.fechaTicket}`;
+  //   if (!ticketsUnicos.has(clave)) {
+  //     ticketsUnicos.set(clave, { usuario: item.usuario, total: item.total });
+  //   }
+  // });
 
-  const totalPorUsuario = Array.from(ticketsUnicos.values()).reduce((acc, item) => {
-    acc[item.usuario] = acc[item.usuario] || { usuario: item.usuario, total: 0 };
-    acc[item.usuario].total += item.total;
-    return acc;
-  }, {} as Record<string, { usuario: string; total: number }>);
+  const totalPorUsuario = datosFiltrados.reduce((acc, item) => {
+  if (!acc[item.usuario]) {
+    acc[item.usuario] = { usuario: item.usuario, total: 0 };
+  }
+  acc[item.usuario].total += item.subtotal; // ✅ usamos el subtotal real
+  return acc;
+}, {} as Record<string, { usuario: string; total: number }>);
+
 
   const totalPorUsuarioArray = Object.values(totalPorUsuario);
   const totalGenerado = totalPorUsuarioArray.reduce((sum, u) => sum + u.total, 0);
   const datosPintado = [{ nombre: "Pintado", total: totalGenerado }];
 
   // ✅ Recalcular total y veces por servicio basados en el filtro
-  const totalPorServicio = Object.values(
-    datosFiltrados.reduce((acc, item) => {
-      if (!acc[item.servicio]) {
-        acc[item.servicio] = {
-          servicio: item.servicio,
-          total: 0,
-          veces: 0,
-        };
-      }
-    // acc[item.servicio].total += item.CostoServicio * item.cantidad;
-    acc[item.servicio].total += item.costoUnitarioServicio * item.cantidad;
+ const totalPorServicio = Object.values(
+  datosFiltrados.reduce((acc, item) => {
+    if (!acc[item.servicio]) {
+      acc[item.servicio] = {
+        servicio: item.servicio,
+        total: 0,
+        veces: 0,
+      };
+    }
+    acc[item.servicio].total += item.subtotal; // ✅ más preciso que costo * cantidad
+    acc[item.servicio].veces += item.cantidad;
+    return acc;
+  }, {} as Record<string, { servicio: string; total: number; veces: number }>)
+);
 
-acc[item.servicio].veces += item.cantidad;
-
-      return acc;
-    }, {} as Record<string, { servicio: string; total: number; veces: number }>)
-  );
 
  const exportarPDF = () => {
   const doc = new jsPDF();
@@ -160,22 +161,14 @@ acc[item.servicio].veces += item.cantidad;
     startY: 30,
   });
 
-  // 🧠 Agrupar por usuario usando tickets únicos
-  const ticketsUnicos = new Map<string, { usuario: string; total: number }>();
-  datosFiltrados.forEach((item) => {
-    const clave = `${item.usuario}-${item.fechaTicket}`;
-    if (!ticketsUnicos.has(clave)) {
-      ticketsUnicos.set(clave, { usuario: item.usuario, total: item.total });
-    }
-  });
+ const resumenPorUsuario = datosFiltrados.reduce((acc, item) => {
+  if (!acc[item.usuario]) {
+    acc[item.usuario] = { usuario: item.usuario, total: 0 };
+  }
+  acc[item.usuario].total += item.subtotal;
+  return acc;
+}, {} as Record<string, { usuario: string; total: number }>);
 
-  const resumenPorUsuario = Array.from(ticketsUnicos.values()).reduce((acc, item) => {
-    if (!acc[item.usuario]) {
-      acc[item.usuario] = { usuario: item.usuario, total: 0 };
-    }
-    acc[item.usuario].total += item.total;
-    return acc;
-  }, {} as Record<string, { usuario: string; total: number }>);
 
   const resumenArray = Object.values(resumenPorUsuario).map((item) => ({
     usuario: item.usuario,
