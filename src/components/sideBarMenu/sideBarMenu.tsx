@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import Person from "@mui/icons-material/Person";
 import BarChart from "@mui/icons-material/BarChart";
 import Logout from "@mui/icons-material/Logout";
+import WebIcon from '@mui/icons-material/Web';
 import ContentCut from "@mui/icons-material/ContentCut";
 import Inventory from "@mui/icons-material/Inventory";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
@@ -20,6 +21,7 @@ const SideBarMenu = () => {
     { name: "Archivos", route: "/Archivos", icon: <InsertDriveFileIcon />, roles: ["ADMINISTRADOR"] },
     { name: "Reportes", route: "/ReporteTicketView", icon: <BarChart />, roles: ["ADMINISTRADOR"] },
     { name: "Reporte-Bar", route: "/ReporteTicketViewBar", icon: <BarChart />, roles: ["BARBERO"] },
+    { name: "Gestion Pagina", route: "/Pagina", icon: <WebIcon  />, roles: ["ADMINISTRADOR"] },
     { name: "Salir", route: "/Login", icon: <Logout />, roles: ["ADMINISTRADOR", "BARBERO"] },
   ]
 

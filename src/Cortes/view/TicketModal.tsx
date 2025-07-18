@@ -84,6 +84,7 @@ const TicketModal = ({ open,
         const payload: ticketsCabeceraDto = {
           idTickets: idnuevo,
           //fechaTicket: new Date(),
+          //fechaTicket: dayjs().tz("America/Guayaquil").utc().toDate(),
           fechaTicket: dayjs().tz("America/Guayaquil").toDate(), 
           estadoTicketCab: true,
           totalTicketCab: detalleConCabecera.reduce(
@@ -93,6 +94,9 @@ const TicketModal = ({ open,
           _usuario_id: usuarioSelecionado.idUsuarios,
           detalle_tickets: detalleConCabecera,
         };
+
+        console.log(" a enviar al backend:", payload);
+
 
         await addTicket({ payload })
         setSnackbar({

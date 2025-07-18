@@ -26,143 +26,145 @@ const ReporteTicketViewBar = () => {
     const [loading, setLoading] = useState(false);
 
     const cargar = async () => {
-        try {
-            setLoading(true);
-            const filtros: any = {
-                page: 1,
-                pageSize: 1000
-            };
-
-            if (fechaInicio) filtros.fechaInicio = fechaInicio;
-            if (fechaFin) filtros.fechaFin = fechaFin;
-
-            const response = await getReporteTickets(filtros);
-            setDatos(response.data);
-        } catch (error) {
-            console.error("❌ Error cargando tickets:", error);
-        } finally {
-            setLoading(false);
-        }
+      try {
+        const filtros: any = {
+          page: 1,
+          pageSize: 1000
+        };
+    
+        if (fechaInicio) filtros.fechaInicio = fechaInicio;
+        if (fechaFin) filtros.fechaFin = fechaFin;
+    
+        const response = await getReporteTickets(filtros);
+        setDatos(response.data);
+      } catch (error) {
+        console.error("❌ Error cargando tickets:", error);
+      }
     };
-
+    
+    
     useEffect(() => {
-        const hoy = dayjs();
-        if (filtroFechaTipo === "DIA") {
-            const hoyStr = hoy.format("YYYY-MM-DD");
-            setFechaInicio(hoyStr);
-            setFechaFin(hoyStr);
-        } else if (filtroFechaTipo === "SEMANA") {
-            const inicio = hoy.startOf("week").format("YYYY-MM-DD");
-            const fin = hoy.endOf("week").format("YYYY-MM-DD");
-            setFechaInicio(inicio);
-            setFechaFin(fin);
-        } else if (filtroFechaTipo === "MES") {
-            const inicio = hoy.startOf("month").format("YYYY-MM-DD");
-            const fin = hoy.endOf("month").format("YYYY-MM-DD");
-            setFechaInicio(inicio);
-            setFechaFin(fin);
-        } else {
-            setFechaInicio("");
-            setFechaFin("");
-        }
+      const hoy = dayjs();
+      if (filtroFechaTipo === "DIA") {
+        const hoyStr = hoy.format("YYYY-MM-DD");
+        setFechaInicio(hoyStr);
+        setFechaFin(hoyStr);
+      } else if (filtroFechaTipo === "SEMANA") {
+        const inicio = hoy.startOf("week").format("YYYY-MM-DD");
+        const fin = hoy.endOf("week").format("YYYY-MM-DD");
+        setFechaInicio(inicio);
+        setFechaFin(fin);
+      } else if (filtroFechaTipo === "MES") {
+        const inicio = hoy.startOf("month").format("YYYY-MM-DD");
+        const fin = hoy.endOf("month").format("YYYY-MM-DD");
+        setFechaInicio(inicio);
+        setFechaFin(fin);
+      } else {
+        // 👇 Aquí fuerza que no se aplique ningún filtro de fecha
+        setFechaInicio("");
+        setFechaFin("");
+      }
     }, [filtroFechaTipo]);
-
-    const datosFiltrados = datos.filter((item) => {
+    
+   
+    
+      const datosFiltrados = datos.filter((item) => {
         const fecha = dayjs(item.fechaTicket);
         const fechaIni = fechaInicio ? dayjs(fechaInicio) : null;
         const fechaFinal = fechaFin ? dayjs(fechaFin) : null;
-
+    
         return (
-            (!usuario || item.usuario.toLowerCase().includes(usuario.toLowerCase())) &&
-            (!servicio || item.servicio.toLowerCase().includes(servicio.toLowerCase())) &&
-            (!fechaIni || fecha.isAfter(fechaIni.subtract(1, "day"))) &&
-            (!fechaFinal || fecha.isBefore(fechaFinal.add(1, "day")))
+          (!usuario || item.usuario.toLowerCase().includes(usuario.toLowerCase())) &&
+          (!servicio || item.servicio.toLowerCase().includes(servicio.toLowerCase())) &&
+          (!fechaIni || fecha.isAfter(fechaIni.subtract(1, "day"))) &&
+          (!fechaFinal || fecha.isBefore(fechaFinal.add(1, "day")))
         );
-    });
-
-    const ticketsUnicos = new Map<string, { usuario: string; total: number }>();
-    datosFiltrados.forEach((item) => {
-        const clave = `${item.usuario}-${item.fechaTicket}`;
-        if (!ticketsUnicos.has(clave)) {
-            ticketsUnicos.set(clave, { usuario: item.usuario, total: item.total });
-        }
-    });
-
-    const totalPorUsuario = Array.from(ticketsUnicos.values()).reduce((acc, item) => {
-        acc[item.usuario] = acc[item.usuario] || { usuario: item.usuario, total: 0 };
-        acc[item.usuario].total += item.total;
-        return acc;
+      });
+    
+    
+      const totalPorUsuario = datosFiltrados.reduce((acc, item) => {
+      if (!acc[item.usuario]) {
+        acc[item.usuario] = { usuario: item.usuario, total: 0 };
+      }
+      acc[item.usuario].total += item.subtotal; // ✅ usamos el subtotal real
+      return acc;
     }, {} as Record<string, { usuario: string; total: number }>);
-
     const totalPorUsuarioArray = Object.values(totalPorUsuario);
     const totalGenerado = totalPorUsuarioArray.reduce((sum, u) => sum + u.total, 0);
+    const datosPintado = [{ nombre: "Pintado", total: totalGenerado }];
 
-    const totalPorServicio = Object.values(
-        datosFiltrados.reduce((acc, item) => {
-            if (!acc[item.servicio]) {
-                acc[item.servicio] = {
-                    servicio: item.servicio,
-                    total: 0,
-                    veces: 0,
-                };
-            }
-            acc[item.servicio].total += item.costoUnitarioServicio * item.cantidad;
-            acc[item.servicio].veces += item.cantidad;
-            return acc;
-        }, {} as Record<string, { servicio: string; total: number; veces: number }>)
+      // ✅ Recalcular total y veces por servicio basados en el filtro
+     const totalPorServicio = Object.values(
+      datosFiltrados.reduce((acc, item) => {
+        if (!acc[item.servicio]) {
+          acc[item.servicio] = {
+            servicio: item.servicio,
+            total: 0,
+            veces: 0,
+          };
+        }
+        acc[item.servicio].total += item.subtotal; // ✅ más preciso que costo * cantidad
+        acc[item.servicio].veces += item.cantidad;
+        return acc;
+      }, {} as Record<string, { servicio: string; total: number; veces: number }>)
     );
-
-    const exportarPDF = () => {
-        const doc = new jsPDF();
-        doc.setFontSize(16);
-        doc.text("Reporte de Tickets", 14, 20);
-
-        const columnas = ["Fecha", "Usuario", "Servicio", "Subtotal", "Total"];
-        const filas = datosFiltrados.sort((a, b) => a.usuario.localeCompare(b.usuario)).map((item) => [
-            dayjs(item.fechaTicket).format("YYYY-MM-DD HH:mm"),
-            item.usuario,
-            item.servicio,
-            item.subtotal.toLocaleString("es-EC", { style: "currency", currency: "USD" }),
-            item.total.toLocaleString("es-EC", { style: "currency", currency: "USD" })
+    
+    
+     const exportarPDF = () => {
+      const doc = new jsPDF();
+      doc.setFontSize(16);
+      doc.text("Reporte de Tickets", 14, 20);
+    
+      // 🔽 Tabla de tickets detallados
+      const columnas = ["Fecha", "Usuario", "Servicio", "Subtotal", "Total"];
+      const filas = datosFiltrados
+        .sort((a, b) => a.usuario.localeCompare(b.usuario)) // Ordenar por usuario
+        .map((item) => [
+          dayjs(item.fechaTicket).format("YYYY-MM-DD HH:mm"),
+          item.usuario,
+          item.servicio,
+          `$${item.subtotal.toFixed(2)}`,
+          `$${item.total.toFixed(2)}`
         ]);
-
-        autoTable(doc, {
-            head: [columnas],
-            body: filas,
-            startY: 30,
-            styles: { fontSize: 10, cellPadding: 3 },
-            headStyles: { fillColor: [25, 118, 210] },
-        });
-
-        const resumenPorUsuario = Array.from(ticketsUnicos.values()).reduce((acc, item) => {
-            if (!acc[item.usuario]) {
-                acc[item.usuario] = { usuario: item.usuario, total: 0 };
-            }
-            acc[item.usuario].total += item.total;
-            return acc;
-        }, {} as Record<string, { usuario: string; total: number }>);
-
-        const resumenArray = Object.values(resumenPorUsuario).map((item) => ({
-            usuario: item.usuario,
-            total: item.total,
-            comision: item.total * 0.5
-        }));
-
-        autoTable(doc, {
-            startY: (doc as any).lastAutoTable.finalY + 10,
-            head: [["Usuario", "Total", "Comisión (50%)"]],
-            body: resumenArray.map(r => [
-                r.usuario,
-                r.total.toLocaleString("es-EC", { style: "currency", currency: "USD" }),
-                r.comision.toLocaleString("es-EC", { style: "currency", currency: "USD" })
-            ])
-        });
-
-        doc.save("reporte_tickets.pdf");
+    
+      autoTable(doc, {
+        head: [columnas],
+        body: filas,
+        startY: 30,
+      });
+    
+     const resumenPorUsuario = datosFiltrados.reduce((acc, item) => {
+      if (!acc[item.usuario]) {
+        acc[item.usuario] = { usuario: item.usuario, total: 0 };
+      }
+      acc[item.usuario].total += item.subtotal;
+      return acc;
+    }, {} as Record<string, { usuario: string; total: number }>);
+    
+    
+      const resumenArray = Object.values(resumenPorUsuario).map((item) => ({
+        usuario: item.usuario,
+        total: item.total,
+        comision: item.total * 0.5
+      }));
+    
+      // 📌 Añadir tabla de resumen por usuario debajo de la anterior
+      autoTable(doc, {
+        startY: (doc as any).lastAutoTable.finalY + 10,
+        head: [["Usuario", "Total", "Comisión (50%)"]],
+        body: resumenArray.map(r => [
+          r.usuario,
+          `$${r.total.toFixed(2)}`,
+          `$${r.comision.toFixed(2)}`
+        ])
+      });
+    
+      doc.save("reporte_tickets.pdf");
     };
-
-    useEffect(() => {
-        cargar();
+    
+    
+      useEffect(() => {
+      cargar();
     }, [fechaInicio, fechaFin]);
 
     return (

@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import GraficoHistorial from "./GraficoHistorial";
 
 
 
@@ -196,113 +197,197 @@ useEffect(() => {
 }, [fechaInicio, fechaFin]);
 
 
-  return (
-    <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
-      <h2 style={{ color: "#1976d2" }}>📊 Reporte de Tickets</h2>
+ return (
+  <div
+    style={{
+      backgroundColor: "#f9f9f9",
+      padding: "2rem",
+      borderRadius: "8px",
+      fontFamily: "Arial, sans-serif",
+    }}
+  >
+    <h2 style={{ color: "#1976d2" }}>📊 Reporte de Tickets</h2>
 
-      {/* Botón exportar */}
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "1rem" }}>
-        <button
-          onClick={exportarPDF}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#1976d2",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer"
-          }}
-        >
-          📄 Exportar a PDF
-        </button>
-      </div>
+    {/* Botón exportar */}
+    <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "1rem" }}>
+      <button
+        onClick={exportarPDF}
+        style={{
+          padding: "8px 16px",
+          backgroundColor: "#1976d2",
+          color: "#fff",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+          transition: "background-color 0.3s",
+        }}
+        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#125ea2")}
+        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#1976d2")}
+      >
+        📄 Exportar a PDF
+      </button>
+    </div>
 
-      {/* Filtros */}
-      <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem", flexWrap: "wrap", alignItems: "center" }}>
-        <input type="text" placeholder="🔍 Usuario" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
-        <input type="text" placeholder="🔍 Servicio" value={servicio} onChange={(e) => setServicio(e.target.value)} />
-        <input type="date" value={fechaInicio} onChange={(e) => setFechaInicio(e.target.value)} />
-        <input type="date" value={fechaFin} onChange={(e) => setFechaFin(e.target.value)} />
+    {/* Filtros */}
+    <fieldset
+      style={{
+        border: "1px solid #ccc",
+        padding: "1rem",
+        borderRadius: "8px",
+        marginBottom: "2rem",
+      }}
+    >
+      <legend style={{ fontWeight: "bold", color: "#333" }}>🎛️ Filtros</legend>
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          flexWrap: "wrap",
+          alignItems: "center",
+        }}
+      >
+        <input
+          type="text"
+          placeholder="🔍 Usuario"
+          value={usuario}
+          onChange={(e) => setUsuario(e.target.value)}
+          style={{ padding: "6px 12px", borderRadius: "4px", border: "1px solid #ccc" }}
+        />
+        <input
+          type="text"
+          placeholder="🔍 Servicio"
+          value={servicio}
+          onChange={(e) => setServicio(e.target.value)}
+          style={{ padding: "6px 12px", borderRadius: "4px", border: "1px solid #ccc" }}
+        />
+        <input
+          type="date"
+          value={fechaInicio}
+          onChange={(e) => setFechaInicio(e.target.value)}
+          style={{ padding: "6px 12px", borderRadius: "4px", border: "1px solid #ccc" }}
+        />
+        <input
+          type="date"
+          value={fechaFin}
+          onChange={(e) => setFechaFin(e.target.value)}
+          style={{ padding: "6px 12px", borderRadius: "4px", border: "1px solid #ccc" }}
+        />
       </div>
 
       {/* Filtros rápidos */}
-      <div style={{ display: "flex", gap: "1rem", marginBottom: "2rem", alignItems: "center", flexWrap: "wrap" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          marginTop: "1rem",
+          flexWrap: "wrap",
+          alignItems: "center",
+        }}
+      >
         <label>
           <input
             type="checkbox"
             checked={filtroFechaTipo === "DIA"}
-            onChange={() => setFiltroFechaTipo(filtroFechaTipo === "DIA" ? "NINGUNO" : "DIA")}
-          /> Día actual
+            onChange={() =>
+              setFiltroFechaTipo(filtroFechaTipo === "DIA" ? "NINGUNO" : "DIA")
+            }
+          />{" "}
+          Día actual
         </label>
         <label>
           <input
             type="checkbox"
             checked={filtroFechaTipo === "SEMANA"}
-            onChange={() => setFiltroFechaTipo(filtroFechaTipo === "SEMANA" ? "NINGUNO" : "SEMANA")}
-          /> Semana actual
+            onChange={() =>
+              setFiltroFechaTipo(filtroFechaTipo === "SEMANA" ? "NINGUNO" : "SEMANA")
+            }
+          />{" "}
+          Semana actual
         </label>
         <label>
           <input
             type="checkbox"
             checked={filtroFechaTipo === "MES"}
-            onChange={() => setFiltroFechaTipo(filtroFechaTipo === "MES" ? "NINGUNO" : "MES")}
-          /> Mes actual
+            onChange={() =>
+              setFiltroFechaTipo(filtroFechaTipo === "MES" ? "NINGUNO" : "MES")
+            }
+          />{" "}
+          Mes actual
         </label>
       </div>
+    </fieldset>
 
-      {/* Total generado */}
-      <h3 style={{ marginTop: "2rem" }}>💼 Total Generado: Pintado</h3>
-      <ResponsiveContainer width="100%" height={250}>
-        <BarChart data={datosPintado}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="nombre" />
-          <YAxis />
-          <Tooltip formatter={(value) => [`$${value}`, "Ganancia total"]} labelFormatter={(label) => `Empresa: ${label}`} />
-          <Legend />
-          <Bar dataKey="total" fill="#2e7d32" name="Total Ganado" />
-        </BarChart>
-      </ResponsiveContainer>
+    {/* Total generado */}
+    <h3 style={{ marginTop: "2rem" }}>💼 Total Generado: Pintado</h3>
+    <ResponsiveContainer width="100%" height={250}>
+      <BarChart data={datosPintado}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="nombre" />
+        <YAxis />
+        <Tooltip
+          formatter={(value) => [`$${value}`, "Ganancia total"]}
+          labelFormatter={(label) => `Empresa: ${label}`}
+        />
+        <Legend />
+        <Bar dataKey="total" fill="#2e7d32" name="Total Ganado" />
+      </BarChart>
+    </ResponsiveContainer>
 
-      {/* Gráfico por Usuario */}
-      <h3 style={{ marginTop: "3rem" }}>Gráfico: Total por Usuario</h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={totalPorUsuarioArray}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="usuario" />
-          <YAxis />
-          <Tooltip formatter={(value) => [`$${value}`, "Total"]} />
-          <Legend />
-          <Bar dataKey="total" fill="#1976d2" />
-        </BarChart>
-      </ResponsiveContainer>
+    {/* Gráfico por Usuario */}
+    <h3 style={{ marginTop: "3rem" }}>👤 Gráfico: Total por Usuario</h3>
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart data={totalPorUsuarioArray}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="usuario" />
+        <YAxis />
+        <Tooltip formatter={(value) => [`$${value}`, "Total"]} />
+        <Legend />
+        <Bar dataKey="total" fill="#1976d2" />
+      </BarChart>
+    </ResponsiveContainer>
 
-      {/* Gráfico por Servicio */}
-      <h3 style={{ marginTop: "3rem" }}>Gráfico: Total por Servicio</h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={totalPorServicio}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="servicio" />
-          <YAxis />
-          <Tooltip
-            content={({ active, payload, label }) => {
-              if (active && payload && payload.length) {
-                return (
-                  <div style={{ backgroundColor: "white", padding: "10px", border: "1px solid #ccc" }}>
-                    <p><strong>{label}</strong></p>
-                    <p style={{ color: "#ffa726" }}>💰 total: ${payload[0].value}</p>
-                    <p style={{ color: "#66bb6a" }}>🔁 veces: {payload[0].payload.veces}</p>
-                  </div>
-                );
-              }
-              return null;
-            }}
-          />
-          <Legend />
-          <Bar dataKey="total" fill="#ffa726" />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
-  );
+    {/* Gráfico por Servicio */}
+    <h3 style={{ marginTop: "3rem" }}>🛠️ Gráfico: Total por Servicio</h3>
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart data={totalPorServicio}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="servicio" />
+        <YAxis />
+        <Tooltip
+          content={({ active, payload, label }) => {
+            if (active && payload && payload.length) {
+              return (
+                <div
+                  style={{
+                    backgroundColor: "white",
+                    padding: "10px",
+                    border: "1px solid #ccc",
+                  }}
+                >
+                  <p>
+                    <strong>{label}</strong>
+                  </p>
+                  <p style={{ color: "#ffa726" }}>
+                    💰 total: ${payload[0].value}
+                  </p>
+                  <p style={{ color: "#66bb6a" }}>
+                    🔁 veces: {payload[0].payload.veces}
+                  </p>
+                </div>
+              );
+            }
+            return null;
+          }}
+        />
+        <Legend />
+        <Bar dataKey="total" fill="#ffa726" />
+      </BarChart>
+    </ResponsiveContainer>
+    {/* 📆 SECCIÓN HISTORIAL */}
+    <GraficoHistorial datosFiltrados={datosFiltrados} />
+  </div>
+);
+
 };
 
 export default ReporteTicketView;
