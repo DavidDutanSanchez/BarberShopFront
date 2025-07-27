@@ -5,11 +5,17 @@ import { PaginationDto } from "../../Dtos/PaginationDto";
 import queryString from 'query-string'
 import { ticketsCabeceraDto } from "../model/ticketsDto";
 
-export const getAllTickets = async (params: GlobalQueryParams<ticketsCabeceraDto>) => {
+export const getAllTickets = async (params: GlobalQueryParams<ticketsCabeceraDto>, estado: boolean) => {
   const parameters: IHttpClientRequestParams<ticketsCabeceraDto[]> = {
-    url: `/Ticket/FindAllTicketsCabecera?${queryString.stringify(params)}`,
+    url: `/Ticket/FindAllTicketsCabecera?${queryString.stringify(params)}&estado=${estado}`,
   }
   return httpClient.get<PaginationDto<ticketsCabeceraDto>>(parameters)
+}
+export const getTicketById = async (id: string) => {
+  const parameters: IHttpClientRequestParams<ticketsCabeceraDto[]> = {
+    url: `/Ticket/FindTicketsCabeceraById?Id=${id}`,
+  }
+  return httpClient.get<ticketsCabeceraDto>(parameters)
 }
 
 export const addTicket = async (params: RequestParams<ticketsCabeceraDto>) => {

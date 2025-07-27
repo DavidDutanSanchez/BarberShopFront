@@ -9,6 +9,7 @@ import ContentCut from "@mui/icons-material/ContentCut";
 import Inventory from "@mui/icons-material/Inventory";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import { List } from '@mui/icons-material';
 
 const SideBarMenu = () => {
   const [collapsed, setCollapsed] = useState(true)
@@ -18,6 +19,7 @@ const SideBarMenu = () => {
     { name: "Productos", route: "/Productos", icon: <Inventory />, roles: ["ADMINISTRADOR"] },
     { name: "Gestion Usuarios", route: "/Usuarios", icon: <ManageAccountsIcon />, roles: ["ADMINISTRADOR"] },
     { name: "Cortes", route: "/Ticket", icon: <ContentCut />, roles: ["ADMINISTRADOR", "BARBERO"] },
+    { name: "Listado de Tickets", route: "/TicketLists", icon: <List />, roles: ["ADMINISTRADOR", "BARBERO"] },
     { name: "Archivos", route: "/Archivos", icon: <InsertDriveFileIcon />, roles: ["ADMINISTRADOR"] },
     { name: "Reportes", route: "/ReporteTicketView", icon: <BarChart />, roles: ["ADMINISTRADOR"] },
     { name: "Reporte-Bar", route: "/ReporteTicketViewBar", icon: <BarChart />, roles: ["BARBERO"] },
