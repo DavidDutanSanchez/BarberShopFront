@@ -60,9 +60,8 @@ const ReporteTicketViewBar = () => {
         setFechaInicio(inicio);
         setFechaFin(fin);
       } else {
-        // 👇 Aquí fuerza que no se aplique ningún filtro de fecha
-        setFechaInicio("");
-        setFechaFin("");
+        setFechaInicio(hoy.startOf("month").format("YYYY-MM-DD"));
+    setFechaFin(hoy.format("YYYY-MM-DD"));
       }
     }, [filtroFechaTipo]);
     
@@ -86,7 +85,7 @@ const ReporteTicketViewBar = () => {
       if (!acc[item.usuario]) {
         acc[item.usuario] = { usuario: item.usuario, total: 0 };
       }
-      acc[item.usuario].total += item.subtotal; // ✅ usamos el subtotal real
+      acc[item.usuario].total += item.subtotal; 
       return acc;
     }, {} as Record<string, { usuario: string; total: number }>);
     const totalPorUsuarioArray = Object.values(totalPorUsuario);

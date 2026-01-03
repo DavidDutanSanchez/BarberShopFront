@@ -61,9 +61,8 @@ useEffect(() => {
     setFechaInicio(inicio);
     setFechaFin(fin);
   } else {
-    // 👇 Aquí fuerza que no se aplique ningún filtro de fecha
-    setFechaInicio("");
-    setFechaFin("");
+    setFechaInicio(hoy.startOf("month").format("YYYY-MM-DD"));
+    setFechaFin(hoy.format("YYYY-MM-DD"));
   }
 }, [filtroFechaTipo]);
 
@@ -171,11 +170,15 @@ useEffect(() => {
 }, {} as Record<string, { usuario: string; total: number }>);
 
 
-  const resumenArray = Object.values(resumenPorUsuario).map((item) => ({
-    usuario: item.usuario,
-    total: item.total,
-    comision: item.total * 0.5
-  }));
+ const resumenArray = Object.values(resumenPorUsuario).map((item) => ({
+  usuario: item.usuario,
+  total: item.total,
+  comision:
+    item.usuario.toLowerCase() === "gjesus"
+      ? item.total * 0.6   // 👈 Gjesus 60%
+      : item.total * 0.5   // 👈 demás 50%
+}));
+
 
   // 📌 Añadir tabla de resumen por usuario debajo de la anterior
   autoTable(doc, {
