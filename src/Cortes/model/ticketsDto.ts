@@ -1,3 +1,4 @@
+import { Persona } from "../../Personas/Model/Persona"
 import { Producto } from "../../Productos/Model/Producto"
 import { ServicioDto } from "../../Servicios/Model/Servicio"
 
@@ -7,6 +8,7 @@ export interface ticketsCabeceraDto {
   estadoTicketCab: boolean
   totalTicketCab: number
   _usuario_id: string
+  persona?: Persona
   detalle_tickets?: ticketsDetalleDto[]
 }
 

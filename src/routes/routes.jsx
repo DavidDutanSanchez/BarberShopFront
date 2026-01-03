@@ -10,6 +10,7 @@ import TicketView from "../Cortes/view/TicketView";
 import Archivos from "../Files/View/Files";
 import ReporteTicketView from "../Reportes/View/ReporteTicketView";
 import ReporteTicketViewBar from "../Reportes/View/ReporteTicketViewBar";
+import TicketLists from "../Cortes/view/TicketLists";
 
 
 import Layout from "../components/layouts/Layout";
@@ -30,6 +31,7 @@ const AppRouter = () => {
                     <Route path="/ReporteTicketView" element={<ReporteTicketView />} />
                     <Route path="/ReporteTicketViewBar" element={<ReporteTicketViewBar />} />
                     <Route path="/Pagina" element={<PaginaInicialS />} />
+                    <Route path="/TicketLists" element={<TicketLists />} />
                 </Route>
             </Routes>
         </Router>
