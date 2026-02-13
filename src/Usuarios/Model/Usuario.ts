@@ -5,5 +5,6 @@ export interface Usuario {
     permisosUsuarios: string;
     _persona_id: string;
     personaNombreCompleto?: string; 
+    estado: boolean;
   }
   

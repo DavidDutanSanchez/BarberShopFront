@@ -47,24 +47,49 @@ const TicketList = () => {
   const [cabeceraSelecionada, setCabeceraSelecionada] = useState<string>('')
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [verNoAnulados, setVerNoAnulados] = useState(true);
+  const [filtroPersona, setFiltroPersona] = useState("");
+  const [filtroFecha, setFiltroFecha] = useState(""); // YYYY-MM-DD
+  const [filtroTotal, setFiltroTotal] = useState(""); // número o texto
+
+  const buildSearch = () => {
+    const parts: string[] = [];
+    if (search.trim()) parts.push(search.trim());
+    if (filtroPersona.trim()) parts.push(filtroPersona.trim());
+    if (filtroTotal.trim()) parts.push(filtroTotal.trim());
+    return parts.join(" ");
+  };
 
   const fetchTickets = async () => {
     try {
-      const ticketsCabeceras = (await getAllTickets({ page: page + 1, pageSize: 20, orderBy: orderBy, isOrderByDescending: order === 'asc' ? true : false, search: search }, verNoAnulados))
-      setTickets(ticketsCabeceras.data)
+      const pageSize = filtroFecha ? 2000 : 20; // <-- si hay fecha, trae más
+      const pageToSend = filtroFecha ? 1 : page + 1; // <-- si hay fecha, siempre primera página
+
+      const ticketsCabeceras = await getAllTickets(
+        {
+          page: pageToSend,
+          pageSize,
+          orderBy,
+          isOrderByDescending: order === "asc",
+          search: buildSearch(),
+        },
+        verNoAnulados
+      );
+
+      setTickets(ticketsCabeceras.data);
       setTotalCount(ticketsCabeceras.total);
     } catch (error) {
       setSnackbar({
         open: true,
         message: (error as DefaultResponseDto<null>).message,
-        severity: 'error'
+        severity: "error",
       });
     }
+  };
 
-  }
   useEffect(() => {
-    fetchTickets()
-  }, [page, order, orderBy, search, verNoAnulados]);
+    fetchTickets();
+  }, [page, order, orderBy, search, verNoAnulados, filtroPersona, filtroFecha, filtroTotal]);
+
 
   const handleRequestSort = (property: keyof ticketsCabeceraDto) => {
     const isAsc = orderBy === property && order === "asc";
@@ -100,6 +125,18 @@ const TicketList = () => {
       fetchTickets();
     }
   }
+
+  const ticketsFiltrados = tickets.filter(t => {
+    if (!filtroFecha) return true;
+
+    const fechaTicket = new Date(t.fechaTicket);
+    const fechaISO = isNaN(fechaTicket.getTime()) ? "" : fechaTicket.toISOString().slice(0, 10);
+
+    // filtroFecha viene como YYYY-MM-DD por el input type="date"
+    return fechaISO === filtroFecha;
+  });
+
+
 
   return (
     <>
@@ -162,10 +199,76 @@ const TicketList = () => {
 
                 <TableCell>Acciones</TableCell>
               </TableRow>
+
+              {/* ✅ AQUÍ VA LA FILA DE FILTROS */}
+              <TableRow>
+                <TableCell>
+                  <TextField
+                    value={filtroPersona}
+                    onChange={(e) => {
+                      setFiltroPersona(e.target.value);
+                      setPage(0);
+                    }}
+
+                    placeholder="Filtrar..."
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                  />
+                </TableCell>
+
+                <TableCell>
+                  <TextField
+                    value={filtroFecha}
+                    onChange={(e) => {
+                      setFiltroFecha(e.target.value);
+                      setPage(0);
+                    }}
+
+                    type="date"
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </TableCell>
+
+                <TableCell>
+                  <TextField
+                    value={filtroTotal}
+                    onChange={(e) => {
+                      setFiltroTotal(e.target.value);
+                      setPage(0);
+                    }}
+
+                    placeholder="$..."
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                  />
+                </TableCell>
+
+                <TableCell>
+                  <Button
+                    variant="text"
+                    onClick={() => {
+                      setFiltroPersona("");
+                      setFiltroFecha("");
+                      setFiltroTotal("");
+                      setSearch("");
+                      setPage(0);
+                    }}
+
+                  >
+                    Limpiar
+                  </Button>
+                </TableCell>
+              </TableRow>
             </TableHead>
 
+
             <TableBody>
-              {tickets.map((row) => (
+              {ticketsFiltrados.map((row) => (
                 <TableRow key={row.idTickets} hover>
                   <TableCell>
                     {`${row.persona?.apellidosPersona} ${row.persona?.nombresPersona}`}

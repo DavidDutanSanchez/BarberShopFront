@@ -25,7 +25,8 @@ const UsuarioView = () => {
     usuario: "",
     contraseniaUsuarios: "",
     permisosUsuarios: "",
-    _persona_id: ""
+    _persona_id: "",
+    estado: true
   });
   const [editId, setEditId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
@@ -34,7 +35,7 @@ const UsuarioView = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fetchData = async () => {
 
-  
+
 
     try {
       const [usuariosData, personasData] = await Promise.all([
@@ -106,7 +107,9 @@ const UsuarioView = () => {
       usuario: "",
       contraseniaUsuarios: "",
       permisosUsuarios: "",
-      _persona_id: ""
+      _persona_id: "",
+      estado: true
+
     });
   };
   return (
@@ -177,6 +180,23 @@ const UsuarioView = () => {
                   {persona.nombresPersona} {persona.apellidosPersona}
                 </MenuItem>
               ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Estado</InputLabel>
+            <Select
+              name="estado"
+              value={formData.estado ? "1" : "0"}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  estado: e.target.value === "1",
+                }))
+              }
+              label="Estado"
+            >
+              <MenuItem value="1">Activo</MenuItem>
+              <MenuItem value="0">Inactivo</MenuItem>
             </Select>
           </FormControl>
         </DialogContent>

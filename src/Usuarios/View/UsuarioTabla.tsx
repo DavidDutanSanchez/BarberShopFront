@@ -54,6 +54,7 @@ const UsuarioTabla: React.FC<Props> = ({ usuarios, onEdit, onDelete }) => {
           <TableCell><strong>Usuario</strong></TableCell>
             <TableCell><strong>Permiso</strong></TableCell>
             <TableCell><strong>Persona</strong></TableCell>
+            <TableCell><strong>Estado</strong></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -62,6 +63,7 @@ const UsuarioTabla: React.FC<Props> = ({ usuarios, onEdit, onDelete }) => {
                <TableCell>{usuario.usuario}</TableCell>
               <TableCell>{usuario.permisosUsuarios}</TableCell>
               <TableCell>{usuario.personaNombreCompleto}</TableCell>
+               <TableCell>{usuario.estado ? "Activo" : "Inactivo"}</TableCell>
               <TableCell>
                 <IconButton onClick={() => onEdit(usuario)}><Edit /></IconButton>
                 <IconButton onClick={() => onDelete(usuario.idUsuarios!)}><Delete /></IconButton>

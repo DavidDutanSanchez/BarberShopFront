@@ -73,8 +73,11 @@ const TicketView = () => {
       </Box>
       <Box display="flex" flexWrap="wrap" gap={3}>
         {empleados
-          .filter(emp => usuariosVisibles.includes(emp._persona_id))
-          .map(emp => {
+  .filter(emp =>
+    usuariosVisibles.includes(emp._persona_id) &&
+    emp.estado === true
+  )
+  .map(emp => {
             const imgSrc = getImageSrc(emp._persona_id);
             return (
               <Button
@@ -141,7 +144,9 @@ const TicketView = () => {
         <DialogTitle>Gestionar empleados visibles</DialogTitle>
         <DialogContent dividers>
           <Box display="flex" flexWrap="wrap" gap={3}>
-            {empleados.map(emp => {
+            {empleados
+  .filter(emp => emp.permisosUsuarios === "BARBERO" && emp.estado === true)
+  .map(emp => {
               const imgSrc = getImageSrc(emp._persona_id);
               return (
                 <Box
