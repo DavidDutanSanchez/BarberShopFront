@@ -1,4 +1,4 @@
-name: Build and deploy Node.js app to Azure Web App - barbershop-front
+name: Build and deploy React app to Azure Web App - barbershop-front
 
 on:
   push:
@@ -15,12 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js version
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
 
-      - name: npm install and build
+      - name: Install dependencies and build
         run: |
           rm -rf node_modules
           npm install
@@ -28,11 +28,11 @@ jobs:
           npm install @rollup/rollup-linux-x64-gnu --save-dev
           npm run build
 
-      - name: Upload artifact for deployment job
+      - name: Upload production build
         uses: actions/upload-artifact@v4
         with:
-          name: node-app
-          path: .
+          name: react-app
+          path: dist
 
   deploy:
     runs-on: ubuntu-latest
@@ -42,10 +42,11 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download production build
         uses: actions/download-artifact@v4
         with:
-          name: node-app
+          name: react-app
+          path: dist
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -59,4 +60,4 @@ jobs:
         with:
           app-name: 'barbershop-front'
           slot-name: 'Production'
-          package: .
+          package: dist
